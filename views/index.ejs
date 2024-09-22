@@ -1,0 +1,18 @@
+
+
+   <% if (mahasiswa.length>0) { %>
+    <%= "Ada Mahasiswa" %>
+    
+   <% } %>
+    <h1>EJS with express</h1>
+    <h2><%= nama %></h2>
+
+    <h3>Daftar Mahasiswa</h3>
+    <% mahasiswa.forEach(m => {
+         %>
+         <ul><li><%= m["nama"] %></li>
+            <li><%= m["email"] %></li></ul>
+         
+         
+     
+    <% }) %>

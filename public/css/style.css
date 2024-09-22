@@ -1,0 +1,9 @@
+body{
+    background-color: blueviolet;
+}
+#myChart{
+    
+    background-color: blanchedalmond;
+    width: 500px !important;
+    height: 300px !important;
+}

@@ -1,0 +1,147 @@
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <img
+        src="img/grafik_sederhana.png"
+        alt="Ren Yamashiro"
+        class="img-thumbnail rounded-circle"
+        width="200"
+      />
+      <h1 class="display-4">MYMOMKU</h1>
+      <p class="lead">Lecture | Love Mymom</p>
+    </div>
+  </div>
+</div>
+
+
+    <div class="button-container">
+        <button id="randomize">Randomize</button>
+        <button id="add-dataset">Add Dataset</button>
+        <button id="add-data">Add Data</button>
+        <button id="remove-dataset">Remove Dataset</button>
+        <button id="remove-data">Remove Data</button>
+    </div>
+
+        <canvas id="myChart" ></canvas>
+   
+
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        
+        const DATA_COUNT = 7;
+        const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
+
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']; // Example labels
+        const data = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Dataset 1',
+                    data: Array.from({ length: DATA_COUNT }, () => Math.floor(Math.random() * 100)),
+                    borderColor: 'red',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                },
+                {
+                    label: 'Dataset 2',
+                    data: Array.from({ length: DATA_COUNT }, () => Math.floor(Math.random() * 100)),
+                    borderColor: 'blue',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                }
+            ]
+        };
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart.js Line Chart'
+                    }
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        },
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            stepSize: 50
+                        }
+                    }
+                }
+            }
+        });
+
+        function randomizeData() {
+            chart.data.datasets.forEach(dataset => {
+                dataset.data = Array.from({ length: chart.data.labels.length }, () => Math.floor(Math.random() * 100));
+            });
+            chart.update();
+        }
+
+        function addDataset() {
+            const dsColor = 'rgba(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ', 0.2)';
+            const newDataset = {
+                label: 'Dataset ' + (chart.data.datasets.length + 1),
+                backgroundColor: dsColor,
+                borderColor: dsColor,
+                data: Array.from({ length: chart.data.labels.length }, () => Math.floor(Math.random() * 100)),
+            };
+            chart.data.datasets.push(newDataset);
+            chart.update();
+        }
+
+        function addData() {
+            if (chart.data.datasets.length > 0) {
+                chart.data.labels.push('New Label');
+                chart.data.datasets.forEach(dataset => {
+                    dataset.data.push(Math.floor(Math.random() * 100));
+                });
+                chart.update();
+            }
+        }
+
+        function removeDataset() {
+            if (chart.data.datasets.length > 0) {
+                chart.data.datasets.pop();
+                chart.update();
+            }
+        }
+
+        function removeData() {
+            if (chart.data.labels.length > 0) {
+                chart.data.labels.pop(); // remove the last label
+                chart.data.datasets.forEach(dataset => {
+                    dataset.data.pop();
+                });
+                chart.update();
+            }
+        }
+
+        document.getElementById('randomize').addEventListener('click', randomizeData);
+        document.getElementById('add-dataset').addEventListener('click', addDataset);
+        document.getElementById('add-data').addEventListener('click', addData);
+        document.getElementById('remove-dataset').addEventListener('click', removeDataset);
+        document.getElementById('remove-data').addEventListener('click', removeData);
+    </script>
+
