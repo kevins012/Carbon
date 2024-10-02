@@ -15,3 +15,13 @@ bread
 milk
 cheese
 git config --global alias.graph "log --all --decorate --oneline --graph"
+
+
+
+
+saat ingin menambahkan suatu folder yang berisi file file yang sudah ada dibuat sebelumnya maka buat fooder baru 
+di resipotory di github terlebih dahulu 
+
+lalu ada disitu banyak macam perintah maka dari itu copas perintah git remote nya yang di github ke cmd atau gitbash
+lalu  git branch -M 
+lalu git push -u original main
