@@ -14,3 +14,4 @@ bananas
 bread
 milk
 cheese
+git config --global alias.graph "log --all --decorate --oneline --graph"
