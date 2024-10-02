@@ -19,7 +19,7 @@
                 <input type="hidden" name="oldEmail" value='<%= contact.oldEmail || contact.email %>'>
                 <input type="hidden" name="_id" value='<%= contact._id.toString() %>'>
             <% } else { %>
-                <form method="post" action="/contact">
+                <form method="post" action="/contact/add">
             <% } %>
 
                 <div class="mb-3">

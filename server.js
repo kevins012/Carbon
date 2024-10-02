@@ -10,6 +10,7 @@ const { getData } = require('./mysql');
 const { getPw } = require('./bcrypt');
 const { fetchAllData, addData, deleteData } = require('./proxy.js');
 
+require('dotenv').config();
 const app = express();
 const port = 3000;
 
@@ -32,28 +33,30 @@ app.use(
 );
 app.use(flash());
 
-// Authentication middleware
-const authMiddleware = (req, res, next) => {
-  if (req.session.authenticated) {
-    return next();
-  } else {
-    res.redirect('/login');
-  }
-};
+const {verifyToken,generate,jwt} = require('./jwt.js')
 
 // Routes
 app.get('/login', (req, res) => {
-  if (req.session.authenticated) {
-    return res.redirect('/');
-  }
-  res.render('login', { title: 'Login Page', layout: 'layouts/first' });
+  const  authorization = req.cookies.token;
+  console.log(authorization);
+  try {
+      const decoded = jwt.verify(authorization, process.env.JWT_SECRET_KEY);
+        console.log('++++++++++++++++');
+        console.log(decoded);
+        req.user = decoded; // Store the decoded user info in the request object
+        res.redirect('/')
+    } catch (error) {
+        console.log("Thanks");
+        res.render('login', { title: 'Login Page', layout: 'layouts/first' });// Redirect to login if token is invalid
+    }
+  
 });
 
 app.get('/registration', (req, res) => {
   res.render('registration', { title: 'Registration Page', layout: 'layouts/first' });
 });
 app.get('/logout', (req, res) => {
-  req.session.authenticated = false;
+  res.clearCookie("token");
   return res.redirect('/login');
 });
 
@@ -84,7 +87,11 @@ app.post(
       res.render('login', { title: 'Login Page', layout: 'layouts/first', errors: errors.array() });
     } else {
       console.log('Login successful');
-      req.session.authenticated = true;
+      
+      const token = generate(req.body.email)
+      res.cookie('token', token, { maxAge: 900000,httpOnly: true, secure: false });
+      
+      
       res.redirect('/');
     }
   }
@@ -119,7 +126,7 @@ app.post(
   }
 );
 
-app.get('/', authMiddleware, (req, res) => {
+app.get('/', verifyToken, (req, res) => {
   const mahasiswa = [
     { nama: 'bulan', email: 'bulan456@gmail.com' },
     { nama: 'angin', email: 'angin012@gmail.com' },
@@ -127,16 +134,16 @@ app.get('/', authMiddleware, (req, res) => {
   res.render('index', { layout: 'layouts/main_layout', nama: 'KevBlod', title: 'Belajarku', mahasiswa });
 });
 
-app.get('/about', authMiddleware, (req, res) => {
+app.get('/about', verifyToken, (req, res) => {
   res.render('about', { layout: 'layouts/main_layout', title: 'About Page' });
 });
 
-app.get('/contact', authMiddleware, async (req, res) => {
+app.get('/contact', verifyToken, async (req, res) => {
   const contacts = await fetchAllData();
   res.render('contact', { layout: 'layouts/main_layout', title: 'Contact Page', contacts, msg: req.flash('msg') });
 });
 
-app.get('/contact/add', authMiddleware, (req, res) => {
+app.get('/contact/add', verifyToken, (req, res) => {
   res.render('add-contact', { title: 'Add Contact Form', layout: 'layouts/main_layout', contact: [] });
 });
 
@@ -186,7 +193,7 @@ app.post(
   }
 );
 
-app.get('/contact/delete/:id', authMiddleware, async (req, res) => {
+app.get('/contact/delete/:id', verifyToken, async (req, res) => {
   const deleted = await deleteData(req.params.id);
   if (deleted) {
     req.flash('msg', 'Contact deleted successfully');
@@ -196,17 +203,17 @@ app.get('/contact/delete/:id', authMiddleware, async (req, res) => {
   }
 });
 
-app.get('/contact/edit/:id', authMiddleware, async (req, res) => {
+app.get('/contact/edit/:id', verifyToken, async (req, res) => {
   const contact = await fetchAllData({ _id: req.params.id });
   res.render('add-contact', { title: 'Edit Contact Form', layout: 'layouts/main_layout', contact });
 });
 
-app.get('/contact/:id', authMiddleware, async (req, res) => {
+app.get('/contact/:id', verifyToken, async (req, res) => {
   const contact = await fetchAllData({ _id: req.params.id });
   res.render('detail', { layout: 'layouts/main_layout', title: 'Contact Details', contact: contact[0] });
 });
 
-app.get('/add', authMiddleware, (req, res) => {
+app.get('/add', verifyToken, (req, res) => {
   res.render('add', { layout: 'layouts/main_layout' });
 });
 

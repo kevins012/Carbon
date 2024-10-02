@@ -1,0 +1,16 @@
+GIT 
+
+$ git config --global user.name "kevin012"
+
+
+$ git config --global user.email "kevinjonathans01@gmail.com"
+verifikasi agar terhubung ke github
+
+git add  = memindahkan ke staging area
+git commit -m "djisdi" menyimpan perubahan 
+git log  = menampilkan semua proses atau alur kita mencommit tadi
+apples
+bananas
+bread
+milk
+cheese
