@@ -25,3 +25,9 @@ di resipotory di github terlebih dahulu
 lalu ada disitu banyak macam perintah maka dari itu copas perintah git remote nya yang di github ke cmd atau gitbash
 lalu  git branch -M 
 lalu git push -u original main
+
+
+lalu jiika ingin modifikasi sekalian juga modifikasi di github, asal sudah di remote sebelumnya, maka pertama jika ada tambah sesuatu di folder maka 
+seperti biasa git add . 
+lalu git commit -m 
+lalu git push
