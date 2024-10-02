@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 ini note 2 yeah
+=======
+ini note 2 yeah
+>>>>>>> f70e28a2a0bfff22b5a1f91a195d3b615820c0cb
+
+gvfbdfgbgbdf
