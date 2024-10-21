@@ -1,0 +1,54 @@
+<%   // Daftar hari dan bulan dalam bahasa Indonesia
+const hari = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+const bulan = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
+function formatTanggal(tanggal) {
+    const dateObj = new Date(tanggal);
+    const namaHari = hari[dateObj.getDay()];
+    const tanggalHari = dateObj.getDate();
+    const namaBulan = bulan[dateObj.getMonth()];
+    const tahun = dateObj.getFullYear();
+    return `${namaHari}, ${tanggalHari} ${namaBulan} ${tahun}`;
+}
+%>
+
+<div class="tw-container tw-mt-5">
+    <h2 class="tw-text-3xl tw-font-bold tw-text-center tw-mb-5">Daftar Kendaraan</h2>
+    <a href='/contact/add' class="tw-bg-green-500 tw-text-white tw-py-2 tw-px-4 tw-rounded-lg hover:tw-bg-green-600 transition duration-300 mb-5 inline-block">
+        <i class="bi bi-plus-circle"></i> Tambah Data
+    </a>
+
+    <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6">
+        <% if (data.length === 0) { %>
+            <div class="tw-col-span-1">
+                <div class="tw-bg-red-300 tw-p-6 tw-rounded-lg tw-shadow-lg">
+                    <div class="tw-text-center">
+                        <p class="tw-text-lg tw-font-semibold">Daftar Kontak Kosong</p>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+        
+        <% data.forEach((data, i) => { %>
+            <% const formattedRiwayatService = formatTanggal(data.riwayat_service);
+               const formattedDateLastOilChange = formatTanggal(data.last_oil_change_date); %>
+            <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-overflow-hidden">
+                <img src="/img/<%= data.vehicle_photo %>" alt="Gambar Kendaraan" class="tw-w-full tw-h-auto tw-object-contain">
+
+
+                <div class="tw-p-6">
+                    <h3 class="tw-text-xl tw-font-semibold tw-text-gray-800">Kendaraan <%= i + 1 %></h3>
+                    <p class="tw-text-gray-600"><strong>Pemilik:</strong> <%= data.owner %></p>
+                    <p class="tw-text-gray-600"><strong>No Registrasi:</strong> <%= data.number_registration %></p>
+                    <div class="tw-text-center tw-mt-4">
+                        <a href='/vehicle/<%= data.ID %>' class="tw-bg-blue-500 tw-text-white tw-py-2 tw-px-4 tw-rounded-lg hover:tw-bg-blue-600 transition duration-300">
+                            <i class="bi bi-info-circle"></i> Detail
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>

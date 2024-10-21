@@ -16,12 +16,12 @@ router.get('/login', (req, res) => {
         res.redirect('/');
     } catch (error) {
         console.log("jjj");
-        res.render('login', { title: 'Login Page', layout: 'layouts/first' });
+        res.render('auth/login', { title: 'Login Page', layout: 'layouts/first' });
     }
 });
 
 router.get('/registration', (req, res) => {
-    res.render('registration', { title: 'Registration Page', layout: 'layouts/first' });
+    res.render('auth/registration', { title: 'Registration Page', layout: 'layouts/first' });
 });
 
 router.get('/logout', (req, res) => {
@@ -35,6 +35,7 @@ router.post('/login/user', [
         const pwChecks = results.filter((r) => r.email === req.body.email)
                                 .map(async (r) => getPw(req.body.password, r.password, 1));
         const pwResults = await Promise.all(pwChecks);
+        req.userId = results.find(r => r.email === req.body.email).id_user;
         if (!pwResults.some(result => result)) {
             return Promise.reject('Invalid password');
         }
@@ -43,9 +44,10 @@ router.post('/login/user', [
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.render('login', { title: 'Login Page', layout: 'layouts/first', errors: errors.array() });
+        res.render('auth/login', { title: 'Login Page', layout: 'layouts/first', errors: errors.array() });
     } else {
-        const token = generate(req.body.email);
+        console.log(req.userId);
+        const token = generate(req.userId ,req.body.email);
         res.cookie('token', token, { maxAge: 900000, httpOnly: true, secure: false });
         res.redirect('/');
     }
@@ -65,10 +67,10 @@ router.post('/registration/user', [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.render('registration', { title: 'Registration Page', layout: 'layouts/first', errors: errors.array() });
+        res.render('auth/registration', { title: 'Registration Page', layout: 'layouts/first', errors: errors.array() });
     } else {
         const password = await getPw(req.body.password);
-        const query = 'INSERT INTO `user` (`ID`, `Nama`, `password`, `email`, `nik`, `last_login`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP())';
+        const query = 'INSERT INTO `user` (`id_user`, `Nama`, `password`, `email`, `nik`, `last_login`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP())';
         await getData(query, [req.body.fullName, password, req.body.email, req.body.nik]);
         res.redirect('/login');
     }
@@ -79,6 +81,7 @@ router.get('/', verifyToken, (req, res) => {
         { nama: 'bulan', email: 'bulan456@gmail.com' },
         { nama: 'angin', email: 'angin012@gmail.com' },
     ];
+    
     res.render('index', { layout: 'layouts/main_layout', nama: 'KevBlod', title: 'Belajarku', mahasiswa });
 });
 

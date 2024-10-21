@@ -1,0 +1,156 @@
+<div class="tw-container tw-mx-auto tw-p-6">
+    <h1 class="tw-text-4xl tw-font-bold tw-text-center tw-mb-10">Daftar Kendaraan</h1>
+
+    <table class="tw-w-full tw-bg-white tw-rounded-lg tw-shadow-lg tw-overflow-hidden">
+        <thead class="tw-bg-gray-200">
+            <tr>
+                <th class="tw-p-4 tw-text-left tw-text-gray-700 tw-font-semibold">Foto</th>
+               <th class="tw-p-4 tw-text-left tw-text-gray-700 tw-font-semibold">Nama Kendaraan</th>
+                <th class="tw-p-4 tw-text-left tw-text-gray-700 tw-font-semibold">Nomor Registrasi</th>
+                <th class="tw-p-4 tw-text-left tw-text-gray-700 tw-font-semibold">Tipe Kendaraan</th>
+                <th class="tw-p-4 tw-text-left tw-text-gray-700 tw-font-semibold">Aksi</th>
+                <th class="tw-p-4 tw-text-left tw-text-gray-700 tw-font-semibold">Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% datas.forEach(data => { %>
+                <tr class="tw-border-b hover:tw-bg-gray-100 relative tw-transition tw-duration-300 group">
+                    <% if (!data.vehicle_photo ){
+                        data.vehicle_photo='noImg.jpg'
+                    } %>
+                    <td class="tw-p-4">
+                      
+                        <img src="/img/<%= data.vehicle_photo %>" alt="Vehicle Photo" class="tw-w-16 tw-h-16 tw-rounded-full tw-object-cover" onclick="openModal(this.src)">
+                    </td>
+                    <td class="tw-p-4"><%= data.vehicle %></td>
+                    <td class="tw-p-4"><%= data.number_registration %></td>
+                    <td class="tw-p-4"><%= data.type_vehicle %></td>
+                    <td class="tw-p-4">
+                        <div class="tw-flex tw-space-x-2">
+                            <form action="/vehicle/delete-vehicle/<%= data.ID %>" method="post">
+                                <input type="hidden" name="owner_id" value="<%= vehicleId %>">
+                                <button class="tw-bg-red-600 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-red-700" title="Delete">
+                                    ❌
+                                </button>
+                            </form>
+                            <a href="/vehicle/update-vehicle/<%= data.ID %>" class="tw-bg-yellow-400 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-yellow-500" title="Update">
+                                ✏️
+                            </a>
+                        </div>
+                    </td>
+                    <td class="tw-p-4">
+                        <div class="relative">
+                            <button onclick="openDetailsModal('<%= data.vehicle %>', '<%= data.type_vehicle %>', '<%= data.transmission_type %>', 'abi', '12', 'dug', 'ws', '343344', '12 -10 -2212')" 
+                                class="tw-bg-blue-600 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-blue-700">
+                                📋
+                            </button>
+                            <button  class="tw-bg-green-600 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-green-700">
+                                <a href="/analysis/visualize/<%= vehicleId %>">📈</a>
+                            </button>
+]
+                            <span class="absolute tw-top-1 tw-left-1/2 tw-transform tw--translate-x-1/2 tw-mt-1 tw-hidden group-hover:tw-block tw-bg-gray-800 tw-text-white tw-text-xs tw-rounded tw-px-1">
+                                Show Details
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+    <div class=" tw-mt-6">
+        <a href="/vehicle/adds/<%= vehicleId %>" class="tw-inline-flex tw-items-center tw-bg-green-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-green-700 tw-transition tw-duration-300">
+            <span class="tw-mr-2">➕</span> Add Vehicle
+        </a>
+    </div>
+    
+    
+    <!-- Modal untuk gambar yang diperbesar -->
+    <div id="imageModal" class="tw-fixed tw-inset-0 tw-bg-black/70 tw-flex tw-items-center tw-justify-center tw-hidden">
+        <div class="tw-relative">
+            <img id="modalImage" class="tw-max-w-full tw-max-h-screen tw-rounded-lg tw-shadow-2xl">
+            <button class="tw-absolute tw-top-2 tw-right-2 tw-text-white tw-bg-gray-800/50 tw-rounded-full tw-p-2" onclick="closeModal()">&times;</button>
+        </div>
+    </div>
+
+    <!-- Modal untuk detail kendaraan -->
+    <div id="detailsModal" class="tw-fixed tw-inset-0 tw-bg-black/70 tw-flex tw-items-center tw-justify-center tw-hidden">
+        <div class="tw-bg-white tw-rounded-lg tw-p-6 tw-shadow-lg tw-w-11/12 sm:tw-w-1/2 lg:tw-w-1/3">
+            <h2 class="tw-text-2xl tw-font-bold tw-mb-4">Detail Kendaraan</h2>
+            <div id="detailsContent" class="tw-space-y-2 tw-text-gray-800"></div>
+            <button class="tw-bg-gray-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw:bg-gray-700" onclick="closeDetailsModal()">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(imageSrc) {
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        modalImage.src = imageSrc;
+        modal.classList.remove('tw-hidden');
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('imageModal');
+        modal.classList.add('tw-hidden');
+    }
+
+    function openDetailsModal(vehicle, typeVehicle, transmission, oilChangeDate, fuel, cylinderVolume, description, emissionStatus, lastUpdated) {
+        const detailsContent = document.getElementById('detailsContent');
+        detailsContent.innerHTML = `
+            <div class="tw-mt-4 tw-overflow-hidden tw-mb-4">
+    <table class="tw-w-full tw-text-left tw-border-collapse tw-bg-gray-50 tw-rounded-lg tw-shadow">
+        <tbody>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Nama Kendaraan</td>
+                <td class="tw-py-2 tw-text-gray-800">:${vehicle}</td>
+            </tr>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Tipe Kendaraan</td>
+                <td class="tw-py-2 tw-text-gray-800">:${typeVehicle}</td>
+            </tr>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Transmisi</td>
+                <td class="tw-py-2 tw-text-gray-800">:${transmission}</td>
+            </tr>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Tanggal Ganti Oli</td>
+                <td class="tw-py-2 tw-text-gray-800">:${oilChangeDate}</td>
+            </tr>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">BBM</td>
+                <td class="tw-py-2 tw-text-gray-800">:${fuel}</td>
+            </tr>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Volume Silinder</td>
+                <td class="tw-py-2 tw-text-gray-800">:${cylinderVolume}</td>
+            </tr>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Deskripsi</td>
+                <td class="tw-py-2 tw-text-gray-800">:${description}</td>
+            </tr>
+            <tr class="tw-border-b">
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Status Emisi</td>
+                <td class="tw-py-2 tw-text-gray-800">:${emissionStatus}</td>
+            </tr>
+            <tr>
+                <td class="tw-py-2 tw-pr-4 tw-font-semibold tw-text-gray-700">Terakhir Diperbarui</td>
+                <td class="tw-py-2 tw-text-gray-800">:${lastUpdated}</td>
+            </tr>
+          
+        </tbody>
+    </table>
+</div>
+
+
+        `;
+        const detailsModal = document.getElementById('detailsModal');
+        detailsModal.classList.remove('tw-hidden');
+    }
+
+    function closeDetailsModal() {
+        const detailsModal = document.getElementById('detailsModal');
+        detailsModal.classList.add('tw-hidden');
+    }
+</script>

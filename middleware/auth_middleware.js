@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
     if (!token) return res.redirect('/login');
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        req.user = decoded; // Store user info in request
+        req.user = decoded.id; // Store user info in request
         next();
     } catch (error) {
         return res.redirect('/login');

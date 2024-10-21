@@ -1,10 +1,10 @@
-<div class="container mt-3">
-    <div class="row">
-        <div class="col md-8">
-            <h1><%= title %></h1>
+<div class="tw-container tw-mt-3">
+    <div class="tw-row">
+        <div class="tw-col md-8">
+            <h1 class="tw-text-2xl tw-font-bold tw-mb-4"><%= title %></h1>
 
             <% if (typeof errors !== 'undefined') { %>
-                <div class="alert alert-danger" role="alert">
+                <div class="tw-bg-red-100 tw-border tw-border-red-400 tw-text-red-700 tw-px-4 tw-py-3 tw-rounded relative tw-mb-4" role="alert">
                     <ul>
                         <% errors.forEach(error => { %>
                             <li><%= error.msg %></li>
@@ -15,30 +15,30 @@
 
             <% if (contact.length > 0) { 
                 contact = contact[0]; %>
-                <form method="post" action="/contact/update">
-                <input type="hidden" name="oldEmail" value='<%= contact.oldEmail || contact.email %>'>
-                <input type="hidden" name="_id" value='<%= contact._id.toString() %>'>
+                <form method="post" action="/contact/update" class="tw-bg-white tw-shadow-lg tw-rounded-lg tw-p-6">
+                    <input type="hidden" name="oldEmail" value='<%= contact.oldEmail || contact.email %>'>
+                    <input type="hidden" name="_id" value='<%= contact._id.toString() %>'>
             <% } else { %>
-                <form method="post" action="/contact/add">
+                <form method="post" action="/contact/add" class="tw-bg-white tw-shadow-lg tw-rounded-lg tw-p-6">
             <% } %>
 
-                <div class="mb-3">
-                    <label for="nama" class="form-label">Name</label>
-                    <input value='<%= contact.nama || '' %>' name="nama" type="text" class="form-control" id="nama" required>
+                <div class="tw-mb-4">
+                    <label for="nama" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Name</label>
+                    <input value='<%= contact.nama || '' %>' name="nama" type="text" class="tw-block tw-w-full tw-mt-1 tw-p-2 tw-border tw-border-gray-300 tw-rounded-md" id="nama" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input value='<%= contact.email || '' %>' name="email" type="email" class="form-control" id="email" required>
+                <div class="tw-mb-4">
+                    <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Email</label>
+                    <input value='<%= contact.email || '' %>' name="email" type="email" class="tw-block tw-w-full tw-mt-1 tw-p-2 tw-border tw-border-gray-300 tw-rounded-md" id="email" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="no_Hp" class="form-label">Phone Number</label>
-                    <input value='<%= contact.no_Hp || '' %>' name="no_Hp" type="tel" class="form-control" id="no_Hp" required>
+                <div class="tw-mb-4">
+                    <label for="no_Hp" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Phone Number</label>
+                    <input value='<%= contact.no_Hp || '' %>' name="no_Hp" type="tel" class="tw-block tw-w-full tw-mt-1 tw-p-2 tw-border tw-border-gray-300 tw-rounded-md" id="no_Hp" required>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
+                <button type="submit" class="tw-bg-blue-600 tw-text-white tw-font-semibold tw-px-4 tw-py-2 tw-rounded hover:tw-bg-blue-700">Submit</button>
+            </form>
         </div>
     </div>
 </div>

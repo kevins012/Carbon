@@ -1,51 +1,65 @@
+<div class="tw-container tw-mx-5 tw-mt-5"> <!-- Mengubah margin agar lebih dekat -->
+  <div class="tw-max-w-2xl tw-bg-white tw-shadow-lg tw-rounded-lg tw-p-6">
+      <h2 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-4">Contact List</h2>
+      <p class="tw-text-gray-600 tw-mb-4">Kelola kontak Anda dengan mudah. Tambahkan, lihat detail, dan hapus kontak sesuai kebutuhan.</p>
+      
+      <a href='/contact/add' class="tw-bg-green-500 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded tw-mb-4 tw-inline-flex tw-items-center">
+          <i class="bi bi-plus-circle tw-mr-2"></i> Add Data
+      </a>
 
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-md-8">
-            <h2>Contact List</h2>
-            <a href='/contact/add' class="btn btn-success mb-2 fs-11"><i class="bi bi-plus-circle "></i>  Add Data</a>
-            <% if (msg.length!==0) { %>
-              <div class="alert alert-success" role="alert">
-                <%= msg %>
-              </div>
-            <% } %>
-            <table class="table">
-                <thead>
+      <% if (msg.length !== 0) { %>
+          <div class="tw-bg-green-100 tw-text-green-800 tw-border tw-border-green-300 tw-rounded tw-p-4 tw-mb-4" role="alert">
+              <%= msg %>
+          </div>
+      <% } %>
+
+      <!-- Kolom Pencarian -->
+      <div class="tw-flex tw-items-center tw-mb-4">
+          <input type="text" placeholder="Search Contacts..." class="tw-flex-1 tw-border tw-border-gray-300 tw-rounded-lg tw-py-2 tw-px-4 tw-mr-2 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-green-500" />
+          <button class="tw-bg-green-500 tw-text-white tw-font-semibold tw-py-2 tw-px-4 tw-rounded">Search</button>
+      </div>
+
+      <table class="tw-min-w-full tw-bg-white tw-border tw-border-gray-300 tw-rounded-lg tw-overflow-hidden">
+          <thead class="tw-bg-gray-100">
+              <tr>
+                  <th class="tw-py-2 tw-px-4 tw-border-b tw-text-left tw-text-gray-700">#</th>
+                  <th class="tw-py-2 tw-px-4 tw-border-b tw-text-left tw-text-gray-700">Nama</th>
+                  <th class="tw-py-2 tw-px-4 tw-border-b tw-text-left tw-text-gray-700">No Hp</th>
+                  <th class="tw-py-2 tw-px-4 tw-border-b tw-text-left tw-text-gray-700">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+              <% if (contacts.length === 0) { %>
                   <tr>
-                    <th scope="col"><i class="bi bi-plus-circle"></i></th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">No Hp</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <% if (contacts.length ===0) { %>
-                    <tr>
-                      <td colspan="4">
-                        <div class="alert alert-danger" role="alert">
-                          Contact List is Empty
-                        </div>
+                      <td colspan="4" class="tw-text-center tw-py-4">
+                          <div class="tw-bg-red-100 tw-text-red-800 tw-border tw-border-red-300 tw-rounded tw-p-4" role="alert">
+                              Contact List is Empty
+                          </div>
                       </td>
-                    </tr>
-                    
-                  <% } %>
-                  <% contacts.forEach((contact,i) => { %>
-                   
-                
-                  <tr>
-                    <th scope="row"><%= i+=1 %></th>
-                    <td><%= contact.nama %></td>
-                    <td><%= contact.no_Hp %></td>
-                    <td><a href='/contact/<%= contact._id %>' class="btn btn-success badge rounded-pill"><i class="bi bi-info-circle"></i> Detail</a></td>
                   </tr>
-                  <% }) %>
-                </tbody>
-              </table>
-              
-                                    
-        </div>                                                                           
-    </div>
-</div>
+              <% } %>
+              <% contacts.forEach((contact, i) => { %>
+                  <tr class="hover:tw-bg-gray-100 transition duration-200 ease-in-out">
+                      <th scope="row" class="tw-py-2 tw-px-4 tw-border-b"><%= i + 1 %></th>
+                      <td class="tw-py-2 tw-px-4 tw-border-b"><%= contact.nama %></td>
+                      <td class="tw-py-2 tw-px-4 tw-border-b"><%= contact.no_Hp %></td>
+                      <td class="tw-py-2 tw-px-4 tw-border-b">
+                          <a href='/contact/<%= contact._id %>' class="tw-bg-green-500 tw-text-white tw-badge tw-rounded-pill tw-py-1 tw-px-3">
+                              <i class="bi bi-info-circle"></i> Detail
+                          </a>
+                      </td>
+                  </tr>
+              <% }) %>
+          </tbody>
+      </table>
 
-   
+      <!-- Pagination -->
+      <div class="tw-flex tw-justify-between tw-mt-4">
+          <span class="tw-text-gray-700">Showing <strong>1-10</strong> of <strong><%= contacts.length %></strong> contacts</span>
+          <div>
+              <button class="tw-bg-gray-300 tw-text-gray-700 tw-py-2 tw-px-4 tw-rounded-l">Previous</button>
+              <button class="tw-bg-gray-300 tw-text-gray-700 tw-py-2 tw-px-4 tw-rounded-r">Next</button>
+          </div>
+      </div>
+  </div>
+</div>

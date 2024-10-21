@@ -1,9 +1,18 @@
-body{
-    background-color: blueviolet;
-}
+
 #myChart{
     
     background-color: blanchedalmond;
     width: 500px !important;
     height: 300px !important;
+}
+/* Mengatur tampilan navbar pada tampilan kecil */
+@media (max-width: 768px) {
+    nav {
+        display: none; /* Sembunyikan navbar secara default */
+    }
+    #navbar-toggler:focus + nav,
+    #navbar-toggler:active + nav {
+        display: flex; /* Tampilkan navbar saat tombol toggle diklik */
+        flex-direction: column;
+    }
 }

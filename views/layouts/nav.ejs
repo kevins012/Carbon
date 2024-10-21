@@ -1,28 +1,96 @@
-<nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">BackEnd</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/about">Abouts</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contact">Contact</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/logout">logout</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
-        </ul>
-      </div>
+<nav class="tw-bg-white tw-shadow-md tw-h-screen tw-fixed tw-w-64 tw-z-50">
+    <div class="tw-container mx-auto tw-flex tw-flex-col tw-p-4">
+        <!-- Logo di atas -->
+        <a class="tw-text-gray-800 tw-font-bold tw-text-2xl tw-mb-6" href="#">
+            🍔 BackEnd
+        </a>
+
+        <!-- Navbar Items -->
+        <div class="tw-flex tw-flex-col">
+            <!-- Home, About, Contact, Vehicle, Visualize, Logout -->
+            <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/" id="homeMenu">
+                🏠 <span class="tw-ml-2">Home</span>
+            </a>
+            <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/about" id="aboutMenu">
+                ℹ️ <span class="tw-ml-2">About</span>
+            </a>
+            <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/contact" id="contactMenu">
+                📞 <span class="tw-ml-2">Contact</span>
+            </a>
+            <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/vehicle" id="vehicleMenu">
+                🚗 <span class="tw-ml-2">Vehicle</span>
+            </a>
+            <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="http://localhost:8501/" id="visualizeMenu">
+                📊 <span class="tw-ml-2">Visualize</span>
+            </a>
+
+            <!-- Profile Menu -->
+            <div class="tw-relative tw-mb-2">
+                <button class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 hover:tw-bg-gray-300" id="profileMenuButton">
+                    👤 <span class="tw-ml-2">Profile</span> <i class="tw-ml-auto tw-bi tw-bi-chevron-down"></i>
+                </button>
+                <div id="profileMenu" class="tw-hidden tw-pl-4 tw-bg-gray-100 tw-rounded tw-mt-2 tw-shadow-md">
+                    <a class="tw-block tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-200" href="/profile/view">View Profile</a>
+                    <a class="tw-block tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-200" href="/profile/edit">Edit Profile</a>
+                </div>
+            </div>
+
+            <!-- Settings Menu -->
+            <div class="tw-relative tw-mb-2">
+                <button class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 hover:tw-bg-gray-300" id="settingsMenuButton">
+                    ⚙️ <span class="tw-ml-2">Settings</span> <i class="tw-ml-auto tw-bi tw-bi-chevron-down"></i>
+                </button>
+                <div id="settingsMenu" class="tw-hidden tw-pl-4 tw-bg-gray-100 tw-rounded tw-mt-2 tw-shadow-md">
+                    <a class="tw-block tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-200" href="/settings/account">Account Settings</a>
+                    <a class="tw-block tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-200" href="/settings/privacy">Privacy Settings</a>
+                </div>
+            </div>
+
+            <!-- Logout -->
+            <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 hover:tw-bg-gray-300" href="/logout" id="logoutMenu">
+                🚪 <span class="tw-ml-2">Logout</span>
+            </a>
+        </div>
     </div>
-  </nav>
-  
+</nav>
+
+<script>
+    // Toggle Profile and Settings Menu
+    const profileMenuButton = document.getElementById('profileMenuButton');
+    const profileMenu = document.getElementById('profileMenu');
+    const settingsMenuButton = document.getElementById('settingsMenuButton');
+    const settingsMenu = document.getElementById('settingsMenu');
+
+    // Fungsi untuk menampilkan/menyembunyikan menu
+    profileMenuButton.addEventListener('click', () => {
+        profileMenu.classList.toggle('tw-hidden');
+        settingsMenu.classList.add('tw-hidden'); // Tutup Settings jika terbuka
+    });
+
+    settingsMenuButton.addEventListener('click', () => {
+        settingsMenu.classList.toggle('tw-hidden');
+        profileMenu.classList.add('tw-hidden'); // Tutup Profile jika terbuka
+    });
+
+    // Warna aktif dan hover
+    function setActiveMenu(menuId) {
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.classList.remove('tw-bg-blue-500', 'tw-text-white');
+            item.classList.add('tw-text-gray-800', 'hover:tw-bg-gray-300');
+        });
+        document.getElementById(menuId).classList.add('tw-bg-blue-500', 'tw-text-white');
+    }
+
+    // Atur menu aktif berdasarkan URL
+    function setActiveMenuByUrl() {
+        const currentUrl = window.location.pathname;
+        document.querySelectorAll('.menu-item').forEach(item => {
+            if (item.getAttribute('href') === currentUrl) {
+                item.classList.add('tw-bg-blue-500', 'tw-text-white');
+            }
+        });
+    }
+
+    // Panggil fungsi saat halaman dimuat
+    setActiveMenuByUrl();
+</script>

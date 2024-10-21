@@ -1,0 +1,34 @@
+<div class="tw-container tw-mx-auto tw-px-4 tw-py-8">
+    <h2 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-6">Formulir Kendaraan</h2>
+    <form class="tw-bg-white tw-rounded-lg tw-shadow-md tw-p-6 tw-space-y-6" method="post" action="/vehicle/add-owner">
+        <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-6">
+            <!-- Owner Name Input -->
+            <div class="tw-flex tw-flex-col">
+                <label for="owner" class="tw-mb-2 tw-font-medium tw-text-gray-700">Nama Pemilik</label>
+                <input type="text" id="owner" name="owner" placeholder="Masukkan nama pemilik"
+                       class="tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
+            </div>
+
+            <!-- Owner Email Input -->
+            <div class="tw-flex tw-flex-col">
+                <label for="email" class="tw-mb-2 tw-font-medium tw-text-gray-700">Owner Email</label>
+                <input type="email" id="email" name="email" placeholder="Masukkan email pemilik"
+                       class="tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
+            </div>
+
+            <!-- No HP Input -->
+            <div class="tw-flex tw-flex-col">
+                <label for="no-hp" class="tw-mb-2 tw-font-medium tw-text-gray-700">No HP</label>
+                <input type="text" id="no-hp" name="no_Hp" placeholder="Masukkan nomor HP"
+                       class="tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-md focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="tw-flex tw-justify-center">
+            <button type="submit" class="tw-bg-blue-500 tw-text-white tw-px-6 tw-py-2 tw-rounded-md tw-font-medium hover:tw-bg-blue-600 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
+                Submit
+            </button>
+        </div>
+    </form>
+</div>

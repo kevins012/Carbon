@@ -1,0 +1,64 @@
+<!-- component -->
+<div class="tw-container tw-mx-auto tw-px-4 tw-py-8">
+    <!-- Button Add New Owner with Plus Emoji -->
+    <a href="/vehicle/add-owner"
+       class="tw-inline-block tw-mt-6 tw-px-5 tw-py-3 tw-text-center tw-text-white tw-font-semibold tw-bg-green-600 tw-rounded-lg tw-shadow-md hover:tw-bg-blue-700">
+        ➕ Add New Owner
+    </a>
+
+    <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+        <% datas.forEach((data, i) => { %>
+            <div class="tw-relative tw-flex tw-flex-col tw-rounded-lg tw-bg-white tw-shadow-md tw-p-4 tw-transition-all hover:tw-shadow-lg">
+                <img
+                    src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    alt="Owner Image"
+                    class="tw-w-full tw-h-48 tw-object-cover tw-rounded-lg" />
+                <div class="tw-mt-4">
+                    <h5 class="tw-text-lg tw-font-medium tw-text-gray-800"><%= data.owner %></h5>
+                    <p class="tw-text-gray-600"><%= data.email %></p>
+                    <p class="tw-text-gray-600"><%= data.no_Hp %></p>
+                </div>
+                <h2 class="tw-text-lg tw-font-bold tw-text-gray-800 tw-mt-4">Informasi Kendaraan</h2>
+
+                <!-- Informasi Kendaraan -->
+                <ul class="tw-mt-2">
+                    <li class="tw-flex tw-justify-between tw-items-center tw-py-2 tw-px-3 tw-rounded-lg 
+                        <%= data.kendaraan < 50 ? 'tw-bg-red-200' : 'tw-bg-white' %>">
+                        Kendaraan: 
+                        <span class="tw-text-gray-700"><%= data.kendaraan %></span>
+                    </li>
+                    <li class="tw-flex tw-justify-between tw-items-center tw-py-2 tw-px-3 tw-rounded-lg 
+                        <%= data.emisiBuruk ? 'tw-bg-red-200' : 'tw-bg-white' %>">
+                        Emisi Buruk: 
+                        <span class="tw-text-gray-700"><%= data.emisiBuruk ? 'Aktif' : 'Tidak Aktif' %></span>
+                    </li>
+                    <li class="tw-flex tw-justify-between tw-items-center tw-py-2 tw-px-3 tw-rounded-lg 
+                        <%= data.gantiOli < 10 ? 'tw-bg-red-200' : 'tw-bg-white' %>">
+                        Ganti Oli: 
+                        <span class="tw-text-gray-700"><%= data.gantiOli %></span>
+                    </li>
+                    <li class="tw-flex tw-justify-between tw-items-center tw-py-2 tw-px-3 tw-rounded-lg 
+                        <%= data.service ? 'tw-bg-red-200' : 'tw-bg-white' %>">
+                        Perlu Service: 
+                        <span class="tw-text-gray-700"><%= data.service ? 'Aktif' : 'Tidak Aktif' %></span>
+                    </li>
+                </ul>
+                <div class="tw-inline-flex tw-flex-wrap tw-items-center tw-gap-3 tw-mt-4">
+                    <!-- Button Detail with Eye Emoji -->
+                    <a href="/vehicle/detail/<%= data.id_user %>/<%= data.id %>"
+                       class="tw-inline-flex tw-items-center tw-rounded-full tw-border tw-border-gray-300 tw-bg-gray-100 tw-p-2 tw-text-gray-700 hover:tw-bg-gray-200">
+                        👁️ Detail
+                    </a>
+
+                    <!-- Button Delete with Trash Emoji -->
+                    <form action="/vehicle/delete/<%= data.id %>" method="POST" class="tw-inline-block">
+                        <button type="submit" 
+                                class="tw-inline-flex tw-items-center tw-rounded-full tw-border tw-border-gray-300 tw-bg-red-100 tw-px-3 tw-py-2 tw-text-red-700 tw-shadow-sm hover:tw-bg-red-200">
+                            🗑️ Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</div>

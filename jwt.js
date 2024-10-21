@@ -43,9 +43,12 @@ const verifyToken = (req, res, next) =>{
     }
 }
 
-const generate = (user) => {
+const generate = (id ,user) => {
     const payload = {
-        username: user.username,
+        id,
+
+   
+        username: user,
         role: 'users',
     };
 

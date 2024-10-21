@@ -11,11 +11,12 @@ router.get('/', verifyToken, async (req, res) => {
     res.render('contact', { layout: 'layouts/main_layout', title: 'Contact Page', contacts, msg: req.flash('msg') });
 });
 
+
 // Keep this route as '/contact/add'
 router.get('/add', verifyToken, (req, res) => {
     res.render('add-contact', { title: 'Add Contact Form', layout: 'layouts/main_layout', contact: [] });
 });
-
+22
 router.post('/add', [
     check('email').custom(async (value) => {
         const contacts = await fetchAllData({ email: value });
@@ -71,6 +72,7 @@ router.get('/delete/:id', verifyToken, async (req, res) => {
         res.status(404).render('error', { title: '404 Not Found' });
     }
 });
+
 
 router.get('/:id', verifyToken, async (req, res) => {
     const contact = await fetchAllData({ _id: req.params.id });
