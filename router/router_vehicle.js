@@ -24,25 +24,26 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage })
 
-
-
-
+const convertDate = (date) => new Date(date).toISOString().split('T')[0];
 router.get('/', verifyToken, async (req, res) => {
-    const datas = await getData(`SELECT * FROM owner WHERE id_user=${req.user}`);
-   
-    res.render('vehicle/owner', { layout: 'layouts/main_layout', title: 'Contact Page', datas, msg: req.flash('msg') });
-});
+    const datas = await getData('SELECT * FROM owner_vehicle WHERE id_owner = ?', [req.user]);
+    console.log(req.user);
+    console.log("VERHASILLLLLLLLLLLLLLLLLLLLLLLLLL");
+    res.render('vehicle/my_vehicle', { layout: 'layouts/main_layout', title: 'Contact Page', datas, msg: req.flash('msg') ,role: req.role});
+})
 router.get('/add-owner', verifyToken, async (req, res) => {
     const datas = await getData(`SELECT * FROM owner WHERE id_user=${req.user}`);
    
-    res.render('vehicle/add-owner', { layout: 'layouts/main_layout', title: 'Contact Page', datas, msg: req.flash('msg') });
+    res.render('vehicle/add-owner', { layout: 'layouts/main_layout', title: 'Contact Page', datas, msg: req.flash('msg'),role: req.role });
 });
-router.get('/detail/:id_user/:vehicleId', verifyToken, async (req, res) => {
+router.post('/detail', verifyToken, async (req, res) => {
     try {
-        const {id_user,vehicleId} = req.params;
+        const vehicleId = req.body.vehicleId;
         // const data = await getData(`SELECT * FROM owner WHERE id_user=${req.user}`);
-        const datas = await getData(` SELECT owner_vehicle.* FROM owner_vehicle JOIN owner ON owner_vehicle.id_owner = owner.id JOIN user ON owner.id_user = user.id_user WHERE owner.id = ? AND user.id_user = ?`, [vehicleId, req.user]);
-    //    console.log(req.user!=id_user);
+        const datas = await getData(` SELECT owner_vehicle.* FROM owner_vehicle JOIN user ON owner_vehicle.id_owner = user.id_user  WHERE owner.id = ? AND user.id_user = ?`, [vehicleId, req.user]);
+        console.log(datas.length);
+   
+        //    console.log(req.user!=id_user);
     //    console.log(id_user);
     //     // Kondisi kedua: jika pengguna memanipulasi ID dan mencoba mengakses kendaraan orang lain
     //     if (datas.length === 0 ) {
@@ -67,24 +68,19 @@ router.get('/detail/:id_user/:vehicleId', verifyToken, async (req, res) => {
             title: 'Vehicle Page',
             vehicleId,
             datas,  // Data kendaraan (mungkin kosong jika belum ada kendaraan)
-            msg: req.flash('msg')
+            msg: req.flash('msg'),
+            role: req.role
         });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error retrieving vehicle data');
     }
 });
-router.get('/adds/:id', verifyToken, async (req, res) => {
+router.get('/adds', verifyToken, async (req, res) => {
     
-   const id = req.params.id
-   console.log(id);
-   const datas = await getData(`
-    SELECT owner_vehicle.* 
-    FROM owner_vehicle
-    JOIN owner ON owner_vehicle.id_owner = owner.id
-    JOIN user ON owner.id_user = user.id_user
-    WHERE owner_vehicle.id_owner = ? AND user.id_user = ?
-`, [id, req.user]);
+   
+
+   const datas = await getData(`SELECT * FROM owner_vehicle WHERE id_owner = ?`, [ req.user]);
 // if (datas.length === 0) {
 //     // Jika tidak ada data, berarti kendaraan tersebut bukan milik user yang sedang login
 //     return res.status(403).send('Access denied');
@@ -92,47 +88,113 @@ router.get('/adds/:id', verifyToken, async (req, res) => {
     res.render('vehicle/add-vehicle', {
         layout: 'layouts/main_layout',
         title: 'Vehicle Page',
-        id
+        role: req.role
         // Asumsikan 'contacts' mengacu pada data yang diambil dari database
       
     });
    
 });
-router.post('/adds', verifyToken,upload.single('vehiclePhoto'), async (req, res) => {
-    
-    
-    const query = `
-        INSERT INTO owner_vehicle 
-        (ID, id_owner, number_registration, vehicle, type_vehicle, transmission_type, last_oil_change_date, fuel, cylinder_volume, description_vehicle, vehicle_photo, riwayat_service, status_emisi, last_update) 
-        VALUES 
-        (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'None', 'Aktif', CURRENT_TIMESTAMP());
-    `;
-    console.log(JSON.stringify(req.file))
-    
-    const vehiclePhotoPath = req.file.filename;
-    console.log(vehiclePhotoPath);
-    try {
-        await getData(query, [
-            req.body.owner_id, 
-            req.body.numberRegistration, 
-            req.body.vehicle, 
-            req.body.typeVehicle, 
-            req.body.transmissionType, 
-            req.body.last_oil_change_date, 
-            req.body.fuel, 
-            req.body.cylinderVolume, 
-            req.body.descriptionVehicle, 
-            vehiclePhotoPath, 
-            req.body.serviceDate
-        ]);
 
-        // Redirect ke halaman kendaraan setelah berhasil menambahkan
+router.get('/update/:id', verifyToken, async (req, res) => {
+    
+   
+
+    const datas = await getData(`SELECT * FROM owner_vehicle WHERE id_owner = ? AND id = ?`, [ req.user,req.params.id] );
+    const last_oil_change_date = convertDate(datas[0].last_oil_change_date);
+    const serviceDate = convertDate(datas[0].riwayat_service);
+
+    res.render('vehicle/update', {
+         layout: 'layouts/main_layout',
+         title: 'Vehicle Page',
+         vehicle:datas[0],
+         last_oil_change_date,
+         serviceDate,
+         role: req.role
+         
+         // Asumsikan 'contacts' mengacu pada data yang diambil dari database
+       
+     });
+    
+ });
+ router.post('/adds/:id?', verifyToken, upload.single('vehiclePhoto'), async (req, res) => {
+    const id = req.params.id; // Jika ada :id, maka ini adalah update
+    const isUpdate = !!id; // Boolean: true jika update, false jika add
+
+    try {
+        // Foto kendaraan
+        const vehiclePhotoPath = req.file ? req.file.filename : null;
+
+        if (isUpdate) {
+            // Logika update
+            const updateQuery = `
+                UPDATE owner_vehicle 
+                SET 
+                    number_registration = ?, 
+                    vehicle = ?, 
+                    type_vehicle = ?, 
+                    transmission_type = ?, 
+                    last_oil_change_date = ?, 
+                    fuel = ?, 
+                    cylinder_volume = ?, 
+                    description_vehicle = ?, 
+                    vehicle_photo = IFNULL(?, vehicle_photo), 
+                    riwayat_service = ?, 
+                    last_update = CURRENT_TIMESTAMP() 
+                WHERE id = ? AND id_owner = ?;
+            `;
+
+            await getData(updateQuery, [
+                req.body.numberRegistration,
+                req.body.vehicle,
+                req.body.typeVehicle,
+                req.body.transmissionType,
+                req.body.lastOilChangeDate,
+                req.body.fuel,
+                req.body.cylinderVolume,
+                req.body.descriptionVehicle,
+                vehiclePhotoPath,
+                req.body.serviceDate,
+                id,
+                req.user,
+            ]);
+
+            console.log(`Vehicle with ID ${id} updated successfully.`);
+        } else {
+            // Logika add
+            const addQuery = `
+                INSERT INTO owner_vehicle 
+                (id, id_owner, number_registration, vehicle, type_vehicle, transmission_type, last_oil_change_date, fuel, cylinder_volume, description_vehicle, vehicle_photo, riwayat_service, status_emisi, last_update) 
+                VALUES 
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP());
+            `;
+
+            await getData(addQuery, [
+                uuidv4(),
+                req.user,
+                req.body.numberRegistration,
+                req.body.vehicle,
+                req.body.typeVehicle,
+                req.body.transmissionType,
+                req.body.lastOilChangeDate,
+                req.body.fuel,
+                req.body.cylinderVolume,
+                req.body.descriptionVehicle,
+                vehiclePhotoPath,
+                req.body.serviceDate,
+                0, // Default status_emisi untuk add
+            ]);
+
+            console.log('New vehicle added successfully.');
+        }
+
+        // Redirect ke halaman kendaraan setelah berhasil
         res.redirect('/vehicle');
     } catch (error) {
-        console.error('Error adding vehicle:', error);
-        res.status(500).send('Error adding vehicle');
+        console.error('Error processing vehicle data:', error);
+        res.status(500).send('Error processing vehicle data');
     }
 });
+
 
 
 router.post('/add-owner',verifyToken, async (req, res) => {
@@ -146,11 +208,11 @@ router.post('/delete-vehicle/:id',verifyToken,async (req, res) => {
     const vehicleId = req.params.id; // Mengambil ID dari parameter URL
 
     // Query SQL untuk menghapus owner berdasarkan ID
-    const query = 'DELETE FROM `owner_vehicle` WHERE `ID` = ?'; // Pastikan nama tabel dan kolom sesuai dengan yang ada di database
+    const query = 'DELETE FROM `owner_vehicle` WHERE `id` = ?'; // Pastikan nama tabel dan kolom sesuai dengan yang ada di database
 
     try {
         await getData(query, [vehicleId]); // Ganti dengan fungsi Anda untuk menjalankan query
-        res.redirect(`/vehicle/detail/${req.body.owner_id}`); // Redirect ke halaman owner setelah penghapusan
+        res.redirect(`/vehicle`); // Redirect ke halaman owner setelah penghapusan
     } catch (error) {
         console.error('Error deleting owner:', error);
         res.status(500).send('Error deleting owner');
@@ -169,7 +231,8 @@ router.get('/:id', verifyToken, async (req, res) => {
             layout: 'layouts/main_layout',
             title: 'Vehicle Page',
              data, // Asumsikan 'contacts' mengacu pada data yang diambil dari database
-            msg: req.flash('msg')
+            msg: req.flash('msg'),
+            role: req.role
         });
     } catch (error) {
         console.error(error);

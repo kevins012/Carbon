@@ -5,6 +5,9 @@ const { getData } = require('../mysql');
 const { getPw } = require('../bcrypt');
 const { generate } = require('../jwt');
 const { verifyToken } = require('../middleware/auth_middleware');
+const { v4: uuidv4 } = require('uuid'); // v4 generates a random UUID
+
+// Generate a UUID
 
 const router = express.Router();
 const jwt = require('jsonwebtoken')
@@ -36,6 +39,7 @@ router.post('/login/user', [
                                 .map(async (r) => getPw(req.body.password, r.password, 1));
         const pwResults = await Promise.all(pwChecks);
         req.userId = results.find(r => r.email === req.body.email).id_user;
+        req.role = results.find(r => r.email === req.body.email).role;
         if (!pwResults.some(result => result)) {
             return Promise.reject('Invalid password');
         }
@@ -46,8 +50,9 @@ router.post('/login/user', [
     if (!errors.isEmpty()) {
         res.render('auth/login', { title: 'Login Page', layout: 'layouts/first', errors: errors.array() });
     } else {
-        console.log(req.userId);
-        const token = generate(req.userId ,req.body.email);
+       
+        const role = req.role === 0 ? 'users' : 'admin';
+        const token = generate(req.userId ,req.body.email,role);
         res.cookie('token', token, { maxAge: 900000, httpOnly: true, secure: false });
         res.redirect('/');
     }
@@ -58,7 +63,7 @@ router.post('/registration/user', [
         const results = await getData('SELECT * FROM user');
         for (const r of results) {
             if (r.email === value) throw new Error('Email already in use');
-            if (req.body.nik === r.nik) throw new Error('NIK already in use');
+            if (req.body.noHp === r.noHp) throw new Error('noHp already in use');
         }
         if (req.body.password !== req.body.confirmPassword) throw new Error('Passwords do not match');
         return true;
@@ -70,8 +75,11 @@ router.post('/registration/user', [
         res.render('auth/registration', { title: 'Registration Page', layout: 'layouts/first', errors: errors.array() });
     } else {
         const password = await getPw(req.body.password);
-        const query = 'INSERT INTO `user` (`id_user`, `Nama`, `password`, `email`, `nik`, `last_login`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP())';
-        await getData(query, [req.body.fullName, password, req.body.email, req.body.nik]);
+
+        const query = 'INSERT INTO `user` (`id_user`, `Nama`, `password`, `email`, `noHp`, `role`,`last_login`, `created_at`) VALUES (?, ?, ?, ?, ?,?, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())';
+
+        await getData(query, [uuidv4(), req.body.fullName, password, req.body.email, req.body.noHp,0]);
+        res.clearCookie("token");
         res.redirect('/login');
     }
 });
@@ -81,8 +89,8 @@ router.get('/', verifyToken, (req, res) => {
         { nama: 'bulan', email: 'bulan456@gmail.com' },
         { nama: 'angin', email: 'angin012@gmail.com' },
     ];
-    
-    res.render('index', { layout: 'layouts/main_layout', nama: 'KevBlod', title: 'Belajarku', mahasiswa });
+    console.log(req.role);
+    res.render('index', { layout: 'layouts/main_layout', nama: 'KevBlod', title: 'Belajarku', mahasiswa,role:req.role });
 });
 
 router.get('/about', verifyToken, (req, res) => {

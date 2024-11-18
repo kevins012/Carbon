@@ -13,6 +13,7 @@ const authRoutes = require('./router/auth_router');
 const contactRoutes = require('./router/router');
 const vehicleRoutes = require('./router/router_vehicle')
 const analysisRoutes = require('./router/router_analysis')
+const usersRoutes = require('./router/users')
 const app = express();
 const port = 3000;
 
@@ -36,9 +37,10 @@ app.use(flash());
 // Routes
 app.use('/', authRoutes);
 app.use('/contact', contactRoutes);
-app.use('/vehicle',vehicleRoutes)
-app.use('/analysis',analysisRoutes)
+app.use('/vehicle',vehicleRoutes);
+app.use('/analysis',analysisRoutes);
 // 404 handler
+app.use('/users',usersRoutes);
 app.use((req, res) => {
     res.status(404).render('error', { title: '404 Not Found' });
 });

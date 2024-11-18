@@ -45,10 +45,13 @@
                 </ul>
                 <div class="tw-inline-flex tw-flex-wrap tw-items-center tw-gap-3 tw-mt-4">
                     <!-- Button Detail with Eye Emoji -->
-                    <a href="/vehicle/detail/<%= data.id_user %>/<%= data.id %>"
-                       class="tw-inline-flex tw-items-center tw-rounded-full tw-border tw-border-gray-300 tw-bg-gray-100 tw-p-2 tw-text-gray-700 hover:tw-bg-gray-200">
-                        👁️ Detail
-                    </a>
+                    <form action="/vehicle/detail" method="POST">
+                        <input type="hidden" name="vehicleId" value="<%= data.id %>">
+                        <button type="submit" class="tw-inline-flex tw-items-center tw-rounded-full tw-border tw-border-gray-300 tw-bg-gray-100 tw-p-2 tw-text-gray-700 hover:tw:bg-gray-200">
+                            👁️ Detail
+                        </button>
+                    </form>
+                    
 
                     <!-- Button Delete with Trash Emoji -->
                     <form action="/vehicle/delete/<%= data.id %>" method="POST" class="tw-inline-block">

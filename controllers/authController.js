@@ -45,7 +45,7 @@ exports.postRegister = async (req, res) => {
   const { fullName, email, password, nik } = req.body;
   const hashedPassword = await hashPw(password);
 
-  await getData('INSERT INTO user (Nama, email, password, nik) VALUES (?, ?, ?, ?)', [fullName, email, hashedPassword, nik]);
+  await getData('INSERT INTO user (Nama, email, password, noHp) VALUES (?, ?, ?, ?)', [fullName, email, hashedPassword, nik]);
   res.redirect('/auth/login');
 };
 

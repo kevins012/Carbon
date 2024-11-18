@@ -17,9 +17,18 @@
             <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/contact" id="contactMenu">
                 📞 <span class="tw-ml-2">Contact</span>
             </a>
-            <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/vehicle" id="vehicleMenu">
-                🚗 <span class="tw-ml-2">Vehicle</span>
-            </a>
+            <% if (role =='users') { %>
+                <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/vehicle" id="vehicleMenu">
+                    🚗 <span class="tw-ml-2">Vehicles</span>
+                </a>
+             
+            <% }
+            else{ %>
+                <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="/users" id="vehicleMenu">
+                    🚗 <span class="tw-ml-2">All Users</span>
+                </a>
+                <% } %>
+            
             <a class="menu-item tw-flex tw-items-center tw-text-gray-800 tw-py-2 tw-px-4 tw-rounded tw-transition-all tw-duration-300 tw-mb-2 hover:tw-bg-gray-300" href="http://localhost:8501/" id="visualizeMenu">
                 📊 <span class="tw-ml-2">Visualize</span>
             </a>

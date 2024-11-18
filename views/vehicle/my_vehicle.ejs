@@ -13,7 +13,8 @@
             </tr>
         </thead>
         <tbody>
-            <% datas.forEach(data => { %>
+            <% datas.forEach(data => { 
+                %>
                 <tr class="tw-border-b hover:tw-bg-gray-100 relative tw-transition tw-duration-300 group">
                     <% if (!data.vehicle_photo ){
                         data.vehicle_photo='noImg.jpg'
@@ -27,13 +28,13 @@
                     <td class="tw-p-4"><%= data.type_vehicle %></td>
                     <td class="tw-p-4">
                         <div class="tw-flex tw-space-x-2">
-                            <form action="/vehicle/delete-vehicle/<%= data.ID %>" method="post">
-                                <input type="hidden" name="owner_id" value="<%= vehicleId %>">
+                            <form action="/vehicle/delete-vehicle/<%= data.id %>" method="post">
+                                <input type="hidden" name="owner_id" value="<%= data.id %>">
                                 <button class="tw-bg-red-600 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-red-700" title="Delete">
                                     ❌
                                 </button>
                             </form>
-                            <a href="/vehicle/update-vehicle/<%= data.ID %>" class="tw-bg-yellow-400 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-yellow-500" title="Update">
+                            <a href="/vehicle/update/<%= data.id %>" class="tw-bg-yellow-400 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-yellow-500" title="Update">
                                 ✏️
                             </a>
                         </div>
@@ -45,7 +46,7 @@
                                 📋
                             </button>
                             <button  class="tw-bg-green-600 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-green-700">
-                                <a href="/analysis/visualize/<%= vehicleId %>">📈</a>
+                                <a href="/analysis/visualize/<%= data.id %>">📈</a>
                             </button>
 ]
                             <span class="absolute tw-top-1 tw-left-1/2 tw-transform tw--translate-x-1/2 tw-mt-1 tw-hidden group-hover:tw-block tw-bg-gray-800 tw-text-white tw-text-xs tw-rounded tw-px-1">
@@ -59,7 +60,7 @@
     </table>
 
     <div class=" tw-mt-6">
-        <a href="/vehicle/adds/<%= vehicleId %>" class="tw-inline-flex tw-items-center tw-bg-green-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-green-700 tw-transition tw-duration-300">
+        <a href="/vehicle/adds" class="tw-inline-flex tw-items-center tw-bg-green-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-green-700 tw-transition tw-duration-300">
             <span class="tw-mr-2">➕</span> Add Vehicle
         </a>
     </div>

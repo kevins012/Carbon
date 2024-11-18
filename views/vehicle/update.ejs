@@ -1,23 +1,20 @@
-
-
-
 <div class="tw-container tw-mx-auto">
-    <h1 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-8">Form Pengisian Data Kendaraan</h1>
+    <h1 class="tw-text-2xl tw-font-bold tw-text-center tw-mb-8">Form Update Data Kendaraan</h1>
 
-    <form class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-6" method="POST" action="/vehicle/adds" enctype="multipart/form-data" >
+    <form class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-6" method="POST" action="/vehicle/adds/<%= vehicle.id %>" enctype="multipart/form-data">
         <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-6">
-            
-           
 
             <div>
                 <label for="numberRegistration" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Nomor Registrasi</label>
                 <input type="text" id="numberRegistration" name="numberRegistration" 
+                       value="<%= vehicle.number_registration %>" 
                        class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
             </div>
 
             <div>
                 <label for="vehicle" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Kendaraan</label>
                 <input type="text" id="vehicle" name="vehicle" 
+                       value="<%= vehicle.vehicle %>" 
                        class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
             </div>
 
@@ -26,21 +23,10 @@
                 <select id="typeVehicle" name="typeVehicle" 
                         class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
                     <option value="">Pilih Tipe</option>
-                    <option value="Sedan">Sedan</option>
-                    <option value="Hatchback">Hatchback</option>
-                    <option value="SUV">SUV (Sport Utility Vehicle)</option>
-                    <option value="MPV">MPV (Multi-Purpose Vehicle)</option>
-                    <option value="Crossover">Crossover</option>
-                    <option value="Pick-up">Pick-up</option>
-                    <option value="Truck">Truck</option>
-                    <option value="Van">Van</option>
-                    <option value="Coupe">Coupe</option>
-                    <option value="Convertible">Convertible</option>
-                    <option value="Station Wagon">Station Wagon</option>
-                    <option value="Minibus">Minibus</option>
-                    <option value="Bus">Bus</option>
-                    <option value="Motorcycle">Motorcycle/Motorbike</option>
-                    <option value="Electric Vehicle">Electric Vehicle (EV)</option>
+                    <option value="Sedan" <%= vehicle.type_vehicle === 'Sedan' ? 'selected' : '' %>>Sedan</option>
+                    <option value="Hatchback" <%= vehicle.type_vehicle === 'Hatchback' ? 'selected' : '' %>>Hatchback</option>
+                    <option value="SUV" <%= vehicle.type_vehicle === 'SUV' ? 'selected' : '' %>>SUV (Sport Utility Vehicle)</option>
+                    <!-- Tambahkan opsi lainnya -->
                 </select>
             </div>
 
@@ -49,70 +35,64 @@
                 <select id="transmissionType" name="transmissionType" 
                         class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
                     <option value="">Pilih Transmisi</option>
-                    <option value="Manual">Manual Transmission (MT)</option>
-                    <option value="Automatic">Automatic Transmission (AT)</option>
-                    <option value="CVT">Continuously Variable Transmission (CVT)</option>
-                    <option value="Semi-Automatic">Semi-Automatic Transmission (AMT)</option>
-                    <option value="DCT">Dual-Clutch Transmission (DCT)</option>
-                    <option value="Tiptronic">Tiptronic/Manumatic</option>
-                    <option value="AMT">Automated Manual Transmission (AMT)</option>
+                    <option value="Manual" <%= vehicle.transmission_type === 'Manual' ? 'selected' : '' %>>Manual Transmission (MT)</option>
+                    <option value="Automatic" <%= vehicle.transmission_type === 'Automatic' ? 'selected' : '' %>>Automatic Transmission (AT)</option>
+                    <!-- Tambahkan opsi lainnya -->
                 </select>
             </div>
 
             <div>
                 <label for="lastOilChangeDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Tanggal Ganti Oli</label>
-                <input type="date" id="lastOilChangeDate" name="lastOilChangeDate" required
+                <input type="date" id="lastOilChangeDate" name="lastOilChangeDate" 
+                       value="<%= last_oil_change_date %>" 
                        class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
             </div>
 
             <div>
                 <label for="fuel" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">BBM</label>
-                <select id="fuel" name="fuel" required
+                <select id="fuel" name="fuel" 
                         class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
-                        <optgroup label="Bensin">
-                            <option value="Pertalite">Pertalite (RON 90)</option>
-                            <option value="Pertamax">Pertamax (RON 92)</option>
-                            <option value="Pertamax Turbo">Pertamax Turbo (RON 98)</option>
-                        </optgroup>
-                        <optgroup label="Diesel">
-                            <option value="Solar">Solar/Biosolar</option>
-                            <option value="Dexlite">Dexlite</option>
-                            <option value="Pertamina Dex">Pertamina Dex</option>
-                        </optgroup>
+                    <optgroup label="Bensin">
+                        <option value="Pertalite" <%= vehicle.fuel === 'Pertalite' ? 'selected' : '' %>>Pertalite (RON 90)</option>
+                        <option value="Pertamax" <%= vehicle.fuel === 'Pertamax' ? 'selected' : '' %>>Pertamax (RON 92)</option>
+                    </optgroup>
+                    <optgroup label="Diesel">
+                        <option value="Solar" <%= vehicle.fuel === 'Solar' ? 'selected' : '' %>>Solar/Biosolar</option>
+                    </optgroup>
                 </select>
             </div>
 
             <div>
                 <label for="cylinderVolume" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Volume Silinder (cc)</label>
-                <input type="number" id="cylinderVolume" name="cylinderVolume" required
+                <input type="number" id="cylinderVolume" name="cylinderVolume" 
+                       value="<%= vehicle.cylinder_volume %>" 
                        class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
             </div>
 
             <div>
                 <label for="descriptionVehicle" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Deskripsi Kendaraan</label>
-                <textarea id="descriptionVehicle" name="descriptionVehicle" rows="3" required
-                          class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500"></textarea>
+                <textarea id="descriptionVehicle" name="descriptionVehicle" rows="3"
+                          class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500"><%= vehicle.description_vehicle %></textarea>
             </div>
 
             <div>
                 <label for="vehiclePhoto" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Foto Kendaraan</label>
-                <input type="file" id="vehiclePhoto" name="vehiclePhoto" accept="image/*" required
+                <input type="file" id="vehiclePhoto" name="vehiclePhoto" accept="image/*"
                        class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
+                <small class="tw-text-gray-600">Foto saat ini: <%= vehicle.vehicle_photo || 'Belum ada foto' %></small>
             </div>
-
             <div>
-                <label for="serviceHistory" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Riwayat Servis</label>
-                <input type="text" id="serviceHistory" name="serviceHistory"
-                       class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
+                
                 <label for="serviceDate" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700">Tanggal Servis</label>
-                <input type="date" id="serviceDate" name="serviceDate"
+                <input value="<%= serviceDate  %>"  type="date" id="serviceDate" name="serviceDate"
                        class="tw-mt-1 tw-block tw-w-full tw-rounded-md tw-border tw-border-gray-300 tw-p-2 tw-shadow-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
             </div>
+        </div>
+
         </div>
 
         <div class="tw-mt-6">
-            <button type="submit" class="tw-w-full tw-p-3 tw-bg-blue-600 tw-text-white tw-font-semibold tw-rounded-md hover:tw-bg-blue-700 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-opacity-50">Simpan Data</button>
+            <button type="submit" class="tw-w-full tw-p-3 tw-bg-blue-600 tw-text-white tw-font-semibold tw-rounded-md hover:tw-bg-blue-700 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-ring-opacity-50">Update Data</button>
         </div>
     </form>
-   
 </div>
