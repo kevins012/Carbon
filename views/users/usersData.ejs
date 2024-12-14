@@ -1,0 +1,25 @@
+<div class="tw-container tw-max-w-4xl tw-mx-auto tw-py-10">
+    <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-6">
+        <div class="tw-flex tw-items-center tw-space-x-6">
+            <!-- User Image -->
+            <img src="<%= datas?.img ? `/img/users/${datas.img}` : '/default-profile.png' %>" 
+          alt="User Image" class="tw-w-24 tw-h-24 tw-rounded-full tw-object-cover tw-border-2 tw-border-gray-300">
+
+            <!-- User Info -->
+            <div class="tw-flex tw-flex-col tw-space-y-2">
+                <span class="tw-text-3xl tw-font-semibold tw-text-gray-800"><%= datas.fullName %></span>
+                <span class="tw-text-lg tw-text-gray-600">Shop Name: <strong class="tw-text-gray-800"><%= datas.shopName %></strong></span>
+                <span class="tw-text-lg tw-text-gray-600">Address: <strong class="tw-text-gray-800"><%= datas.address %></strong></span>
+                <span class="tw-text-lg tw-text-gray-600">Rating: <strong class="tw-text-gray-800">4.5</strong></span>
+                <span class="tw-text-lg tw-text-gray-600">HandPhone: <strong class="tw-text-gray-800"><%= datas.no_Hp %></strong></span>
+                <span class="tw-text-lg tw-text-gray-600">Total CO Emission: <strong class="tw-text-gray-800"><%= datas.total_co %></strong></span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="tw-mt-6 tw-flex tw-justify-start tw-space-x-4">
+            <a href="/users/update"  class="tw-bg-blue-500 tw-text-white tw-px-6 tw-py-3 tw-rounded-md tw-font-semibold hover:tw-bg-blue-600 transition">Update Profile</a>
+            <a href="/users/update" class="tw-bg-red-500 tw-text-white tw-px-6 tw-py-3 tw-rounded-md tw-font-semibold hover:tw-bg-red-600 transition">Delete Account</a>
+        </div>
+    </div>
+</div>

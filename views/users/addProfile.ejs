@@ -1,0 +1,106 @@
+<main class="tw-mt-6">
+  <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6 tw-max-w-lg tw-mx-auto">
+    <form 
+      id="profileForm" 
+      enctype="multipart/form-data" 
+      method="POST" 
+      action="<%= datas ? '/users/update' : '/users/add-profile' %>">
+      
+      <div class="tw-space-y-4">
+        <!-- Full Name -->
+        <div class="tw-flex tw-flex-col">
+          <label for="fullName" class="tw-text-gray-700 tw-font-semibold">Full Name</label>
+          <input 
+            type="text" 
+            id="fullName" 
+            name="fullName" 
+            class="tw-border tw-rounded-md tw-px-2 tw-py-1" 
+            placeholder="Masukkan Nama Lengkap" 
+            value="<%= datas ? datas.fullName : '' %>" 
+            required>
+        </div>
+
+        <!-- Address -->
+        <div class="tw-flex tw-flex-col">
+          <label for="address" class="tw-text-gray-700 tw-font-semibold">Address</label>
+          <input 
+            type="text" 
+            id="address" 
+            name="address" 
+            class="tw-border tw-rounded-md tw-px-2 tw-py-1" 
+            placeholder="Masukkan Alamat" 
+            value="<%= datas ? datas.address : '' %>" 
+            required>
+        </div>
+
+        <!-- Shop Name -->
+        <div class="tw-flex tw-flex-col">
+          <label for="shopName" class="tw-text-gray-700 tw-font-semibold">Shop Name</label>
+          <input 
+            type="text" 
+            id="shopName" 
+            name="shopName" 
+            class="tw-border tw-rounded-md tw-px-2 tw-py-1" 
+            placeholder="Masukkan Nama Toko" 
+            value="<%= datas ? datas.shopName : '' %>" 
+            required>
+        </div>
+
+        <!-- Handphone Number -->
+        <div class="tw-flex tw-flex-col">
+          <label for="noHp" class="tw-text-gray-700 tw-font-semibold">Handphone Number</label>
+          <input 
+            type="text" 
+            id="noHp" 
+            name="noHp" 
+            class="tw-border tw-rounded-md tw-px-2 tw-py-1" 
+            placeholder="Masukkan Nomor Handphone" 
+            value="<%= datas ? datas.noHp : '' %>" 
+            required>
+        </div>
+
+        <!-- User Image (File Input) -->
+        <div class="tw-flex tw-flex-col">
+          <label for="img" class="tw-text-gray-700 tw-font-semibold">Profile Image</label>
+          <input 
+            type="file" 
+            id="img" 
+            name="img" 
+            class="tw-border tw-rounded-md tw-px-2 tw-py-1" 
+            accept="image/*">
+          <div class="tw-mt-2">
+            <img 
+              id="previewImg" 
+              src="<%= datas && datas.img ? `/img/users/${datas.img}` : '/default-profile.png' %>" 
+              alt="Profile Preview" 
+              class="tw-w-32 tw-h-32 tw-rounded-full tw-object-cover tw-shadow-md">
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="tw-flex tw-justify-center">
+          <button type="submit" class="tw-bg-blue-500 tw-text-white tw-font-semibold tw-px-6 tw-py-2 tw-rounded-lg tw-shadow-md hover:tw-bg-blue-600 focus:tw-ring-2 focus:tw-ring-blue-300">
+            <%= datas ? 'Update Profile' : 'Add Profile' %>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script>
+  // Pratinjau Gambar Baru
+  const imgInput = document.getElementById('img');
+  const previewImg = document.getElementById('previewImg');
+
+  imgInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        previewImg.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>

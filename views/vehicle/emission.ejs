@@ -1,0 +1,153 @@
+<div class="tw-px-5 tw-py-4 tw-max-w-screen-xl tw-mx-auto tw-flex tw-flex-wrap tw-gap-8">
+    <!-- Grafik pertama -->
+    <div id="myplot" class="tw-w-full tw-md:w-1/2 tw-p-4 tw-mb-8 tw-rounded-lg tw-shadow-lg tw-border">
+        <!-- Kontainer untuk grafik pertama -->
+    </div>
+    
+    <!-- Grafik kedua -->
+    <div id="myplot2" class="tw-w-full tw-md:w-1/2 tw-p-4 tw-mb-8 tw-rounded-lg tw-shadow-lg tw-border">
+        <!-- Kontainer untuk grafik kedua -->
+    </div>
+    
+    <% const co = emissions.reduce((sum, row) => sum + row.CO, 0); 
+    const no2 = emissions.reduce((sum, row) => sum + row.NO2, 0);%>
+    <form action="/products/sell" method="POST" class="tw-max-w-md tw-mx-auto tw-bg-white tw-shadow-lg tw-rounded-lg tw-p-6 tw-mt-8 tw-border tw-border-gray-200">
+        <!-- Header Form -->
+        <h2 class="tw-text-2xl tw-font-semibold tw-text-center tw-text-blue-600 tw-mb-6">Pembelian Karbon dan Nitrogen Dioxide</h2>
+    
+        <!-- Info CO -->
+        <div class="tw-mb-4">
+            <label class="tw-block tw-text-gray-700 tw-font-medium" for="quantity_co">Total Karbon (CO):</label>
+            <p class="tw-text-xl tw-font-semibold tw-text-blue-600">
+                <%= co.toFixed(2) %> g/m<sup>3</sup>
+            </p>
+        </div>
+    
+        
+    
+        <!-- Input untuk jumlah CO yang ingin dibeli -->
+        <div class="tw-mb-4">
+            <label for="co" class="tw-block tw-text-gray-700 tw-font-medium">Masukkan Jumlah Karbon (CO) yang ingin dibeli:</label>
+            <input type="number" id="co" name="co" min="0" value="0" class="tw-w-full tw-p-3 tw-border tw-border-gray-300 tw-rounded-lg tw-mt-2 tw-focus:ring-2 tw-focus:ring-blue-500" placeholder="Jumlah Karbon yang ingin dibeli" required />
+        </div>
+    
+        
+    
+        <!-- Tombol untuk beli -->
+        <div class="tw-text-center">
+            <button type="submit" class="tw-w-full tw-bg-blue-600 tw-text-white tw-py-3 tw-rounded-lg tw-hover:bg-blue-700 tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-400">
+                Tambahkan ke Keranjang
+            </button>
+        </div>
+    
+        <!-- Footer -->
+        <div class="tw-mt-4 tw-text-center tw-text-gray-500 tw-text-sm">
+            <p>Dengan membeli emisi karbon , Anda turut berkontribusi untuk menjaga lingkungan.</p>
+        </div>
+    </form>
+    
+    
+    
+      
+      
+</div>
+
+<!-- Data emisi disimpan dalam elemen dengan ID '_data' -->
+<div id="_data" data-params="<%= JSON.stringify(emissions) %>"></div>
+
+<!-- Kontrol input untuk memilih tanggal -->
+<div class="tw-flex tw-flex-col tw-gap-6 tw-items-center tw-mt-6">
+    <% 
+        // Mengambil nilai minimum dan maksimum tanggal dari data emisi
+        const s = [];
+        emissions.forEach(em => s.push(em.update_time));
+        const minDate = new Date(Math.min(...s.map(d => new Date(d))));
+        const maxDate = new Date(Math.max(...s.map(d => new Date(d))));
+
+        // Format tanggal ke format 'YYYY-MM-DD'
+        const minDateStr = minDate.toISOString().split('T')[0];
+        const maxDateStr = maxDate.toISOString().split('T')[0];
+
+        // Menghitung tanggal tengah
+        const midDate = new Date((minDate.getTime() + maxDate.getTime()) / 2);
+        const midDateStr = midDate.toISOString().split('T')[0];
+    %>
+
+    <!-- Rentang input tanggal -->
+    <div class="tw-flex tw-gap-6 tw-items-center">
+        <div class="tw-flex tw-flex-col">
+            <label for="date-select" class="tw-text-lg tw-font-medium">Select Start Date:</label>
+            <input type="date" id="date-select" 
+                   min="<%= minDateStr %>" max="<%= maxDateStr %>"
+                   value="<%= midDateStr %>" 
+                   class="tw-px-4 tw-py-3 tw-border tw-rounded-lg tw-shadow-sm tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-500">
+        </div>
+
+        <div class="tw-flex tw-flex-col">
+            <label for="date-select-max" class="tw-text-lg tw-font-medium">Select End Date:</label>
+            <input type="date" id="date-select-max" 
+                   min="<%= minDateStr %>" max="<%= maxDateStr %>"
+                   value="<%= maxDateStr %>" 
+                   class="tw-px-4 tw-py-3 tw-border tw-rounded-lg tw-shadow-sm tw-focus:outline-none tw-focus:ring-2 tw-focus:ring-blue-500">
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    const rangeDateStart = document.getElementById("date-select");  // Input Start Date
+    const rangeDateEnd = document.getElementById("date-select-max");  // Input End Date
+    const Emisi = document.getElementById('_data').dataset.params;  // Ambil data dari elemen _data
+    const dataEmisi = JSON.parse(Emisi);  // Parse data menjadi objek
+
+    // Fungsi untuk membuat plot berdasarkan rentang tanggal dari input date
+    function createPlot(minTime, maxTime) {
+        const plot = Plot.plot({
+            x: {
+                domain: [new Date(minTime), new Date(maxTime)],  // Rentang waktu berdasarkan minTime dan maxTime
+                grid: true
+            },
+            y: {
+                label: "CO",
+                labelAnchor: "top"
+            },
+            color: {legend: true},
+            marks: [
+                Plot.lineY(dataEmisi, {x: "update_time", y: "CO", stroke: "red"}), // Grafik CO
+            ],
+        });
+
+        // Menambahkan plot ke dalam elemen dengan id 'myplot'
+        document.getElementById("myplot").innerHTML = "";  // Hapus plot sebelumnya
+        document.getElementById("myplot").append(plot);  // Menampilkan plot baru
+    }
+
+    // Set plot awal dengan rentang yang diambil dari input date
+    createPlot(rangeDateStart.value, rangeDateEnd.value);
+
+    // Event listener untuk menangani perubahan tanggal pada input date
+    rangeDateStart.addEventListener("change", updatePlot);
+    rangeDateEnd.addEventListener("change", updatePlot);
+
+    // Fungsi untuk memperbarui plot berdasarkan nilai rentang tanggal
+    function updatePlot() {
+        // Ambil nilai yang dipilih dari input start dan end date
+        const selectedStartDate = new Date(rangeDateStart.value);  // Ambil tanggal mulai
+        const selectedEndDate = new Date(rangeDateEnd.value);  // Ambil tanggal selesai
+        
+        // Pastikan selectedEndDate mencakup hingga akhir hari
+        selectedEndDate.setHours(23, 59, 59, 999);
+        
+        // Filter data berdasarkan rentang tanggal yang dipilih
+        const filteredData = dataEmisi.filter(d => {
+            const updateTime = new Date(d.update_time);
+            return updateTime >= selectedStartDate && updateTime <= selectedEndDate;
+        });
+
+        // Ambil min dan max dari data yang sudah difilter
+        const newMinTime = d3.min(filteredData, d => new Date(d.update_time));
+        const newMaxTime = d3.max(filteredData, d => new Date(d.update_time));
+
+        // Perbarui plot berdasarkan rentang waktu yang baru
+        createPlot(newMinTime, newMaxTime);
+    }
+</script>

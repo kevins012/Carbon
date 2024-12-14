@@ -36,6 +36,38 @@ router.get('/add-owner', verifyToken, async (req, res) => {
    
     res.render('vehicle/add-owner', { layout: 'layouts/main_layout', title: 'Contact Page', datas, msg: req.flash('msg'),role: req.role });
 });
+
+router.get('/emission/:id', verifyToken, async (req, res) => {
+    try {
+        // SQL query to fetch emissions based on the logged-in user
+        const query = `
+            SELECT emission.* 
+            FROM emission
+            INNER JOIN owner_vehicle ON emission.id_vehicle = ?
+            INNER JOIN user ON owner_vehicle.id_owner = user.id_user
+            WHERE user.id_user = ?
+            ORDER BY emission.update_time ASC
+        `;
+
+        // Fetch data from the database
+        const emissions = await getData(query, [req.params.id,req.user]); // Ensure req.user.id_user contains the logged-in user's ID
+        
+        // Return the emissions data as JSON
+        res.render('vehicle/emission', {
+            layout: 'layouts/main_layout',
+            title: 'Vehicle Page',
+            
+            emissions,  // Data kendaraan (mungkin kosong jika belum ada kendaraan)
+            msg: req.flash('msg'),
+            role: req.role
+           
+        });
+    } catch (error) {
+        console.error('Error retrieving emission data:', error);
+        res.status(500).send('ssss retrieving emission data');
+    }
+});
+
 router.post('/detail', verifyToken, async (req, res) => {
     try {
         const vehicleId = req.body.vehicleId;
@@ -239,4 +271,5 @@ router.get('/:id', verifyToken, async (req, res) => {
         res.status(500).send('Error retrieving vehicle data');
     }
 });
+
 module.exports = router;

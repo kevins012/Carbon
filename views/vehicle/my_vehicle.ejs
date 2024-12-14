@@ -15,7 +15,7 @@
         <tbody>
             <% datas.forEach(data => { 
                 %>
-                <tr class="tw-border-b hover:tw-bg-gray-100 relative tw-transition tw-duration-300 group">
+                <tr class="tw-border-b hover:tw-bg-blue-300 relative tw-transition tw-duration-300 group">
                     <% if (!data.vehicle_photo ){
                         data.vehicle_photo='noImg.jpg'
                     } %>
@@ -46,9 +46,9 @@
                                 📋
                             </button>
                             <button  class="tw-bg-green-600 tw-text-white tw-px-2 tw-py-1 tw-rounded-md hover:tw:bg-green-700">
-                                <a href="/analysis/visualize/<%= data.id %>">📈</a>
+                                <a href="/vehicle/emission/<%= data.id %>">📈</a>
                             </button>
-]
+
                             <span class="absolute tw-top-1 tw-left-1/2 tw-transform tw--translate-x-1/2 tw-mt-1 tw-hidden group-hover:tw-block tw-bg-gray-800 tw-text-white tw-text-xs tw-rounded tw-px-1">
                                 Show Details
                             </span>

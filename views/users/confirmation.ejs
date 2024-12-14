@@ -1,0 +1,36 @@
+<div class="tw-max-w-4xl tw-mx-auto tw-p-6">
+    <div class="tw-bg-white tw-shadow-xl tw-rounded-lg tw-p-6 tw-space-y-6">
+      <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800">Payment Confirmation</h1>
+
+      <div class="tw-bg-gray-50 tw-p-4 tw-rounded-md">
+        <h2 class="tw-text-xl tw-font-semibold tw-text-gray-700">Confirm your purchase</h2>
+        <p class="tw-text-gray-600">Seller: <span class="tw-font-medium tw-text-gray-800"><%= data.seller %></span></p>
+        <p class="tw-text-gray-600">Amount: <span class="tw-font-medium tw-text-gray-800"><%= data.amount %> CO</span></p>
+        
+        
+        
+        <p class="tw-text-gray-600">Price: <span class="tw-font-medium tw-text-gray-800"><%= data.price %></span></p>
+        <p class="tw-text-gray-600">Contact Person: <span class="tw-font-medium tw-text-gray-800">+82334439484</span></p>
+    
+    </div>
+
+      <form action="/market/payment" method="POST" class="tw-space-y-4">
+        <div class="tw-mb-4">
+          <label for="paymentMethod" class="tw-block tw-text-lg tw-font-medium tw-text-gray-700">Payment Method</label>
+          <select id="paymentMethod" name="paymentMethod" class="tw-w-full tw-border tw-border-gray-300 tw-px-4 tw-py-2 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-blue-500">
+            <option value="creditCard">Credit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="bankTransfer">Bank Transfer</option>
+          </select>
+        </div>
+        
+        <input type="hidden" name="seller" value="<%= data.seller %>">
+        <input type="hidden" name="amount" value="<%= data.amount %>">
+        <input type="hidden" name="price" value="<%= data.price %>">
+
+        <button type="submit" class="tw-w-full tw-bg-green-500 tw-text-white tw-py-3 tw-rounded-lg hover:tw-bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+          Create Payment
+        </button>
+      </form>
+    </div>
+  </div>

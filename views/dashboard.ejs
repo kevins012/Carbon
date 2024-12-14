@@ -1,0 +1,94 @@
+<main class="tw-mt-6">
+    <!-- Summary Section -->
+    <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6">
+      <!-- Card Jumlah Kendaraan -->
+      <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6">
+        <h2 class="tw-text-lg tw-font-semibold tw-text-gray-700">Jumlah Kendaraan</h2>
+        <p class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mt-2">500</p>
+      </div>
+      <!-- Card Total Emisi CO -->
+      <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6">
+        <h2 class="tw-text-lg tw-font-semibold tw-text-gray-700">Total Emisi CO</h2>
+        <p class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mt-2">350 ppm</p>
+      
+        <a href="/users" 
+        class="tw-bg-blue-500 tw-text-white tw-font-semibold tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm hover:tw-bg-blue-600 focus:tw-ring-2 focus:tw-ring-blue-300"
+        onclick="handleSellCarbon()">Sell</a>
+            
+      </div>
+      <!-- Card Total Emisi NO2 -->
+      <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6">
+        <h2 class="tw-text-lg tw-font-semibold tw-text-gray-700">Total Emisi NO<sub>2</sub></h2>
+        <p class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mt-2">120 ppm</p>
+      </div>
+    </div>
+
+    <!-- Batasan Emisi Section -->
+    <div class="tw-mt-8">
+      <h2 class="tw-text-xl tw-font-bold tw-text-gray-800">Informasi Batasan Emisi</h2>
+      <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6 tw-mt-4">
+        <ul class="tw-space-y-4">
+          <li class="tw-flex tw-justify-between">
+            <span>Batas Emisi CO:</span>
+            <span class="tw-text-gray-700">300 ppm</span>
+          </li>
+          <li class="tw-flex tw-justify-between">
+            <span>Batas Emisi NO<sub>2</sub>:</span>
+            <span class="tw-text-gray-700">100 ppm</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Alert Section -->
+   
+    <div class="tw-mt-8">
+      <h2 class="tw-text-xl tw-font-bold tw-text-gray-800">Riwayat Transaksi Penjualan Karbon</h2>
+      <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-overflow-x-auto tw-mt-4">
+          <table class="tw-min-w-full tw-table-auto tw-border-collapse tw-text-left">
+              <thead class="tw-bg-gray-50">
+                  <tr>
+                      <th class="tw-px-6 tw-py-3 tw-text-gray-700 tw-font-semibold">No</th>
+                      <th class="tw-px-6 tw-py-3 tw-text-gray-700 tw-font-semibold">Tanggal</th>
+                      <th class="tw-px-6 tw-py-3 tw-text-gray-700 tw-font-semibold">Jumlah Karbon (kg)</th>
+                      <th class="tw-px-6 tw-py-3 tw-text-gray-700 tw-font-semibold">Status</th>
+                      <th class="tw-px-6 tw-py-3 tw-text-gray-700 tw-font-semibold">Aksi</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <% myTransaction.forEach((data, index) => { %>
+                      <tr class="tw-border-b tw-bg-white hover:tw-bg-gray-50">
+                          <td class="tw-px-6 tw-py-4"><%= index + 1 %></td>
+                          <td class="tw-px-6 tw-py-4"><%= new Date(data.created_at).toLocaleDateString('id-ID') %></td> <!-- Format tanggal -->
+                          <td class="tw-px-6 tw-py-4"><%= data.amount %></td>
+                          <td class="tw-px-6 tw-py-4"><%= data.status %></td>
+                          <td class="tw-px-6 tw-py-4">
+                              <% if (data.status === 'pending') { %>
+                                  <a href="<%= data.link %>" class="tw-bg-blue-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-blue-600">
+                                      Lanjutkan Pembayaran
+                                  </a>
+                              <% } else if (data.status === 'success') { %>
+                                  <a class="tw-bg-green-500 tw-text-white tw-px-4 tw-py-2 tw-rounded-md hover:tw-bg-green-600" href="/market/status?id=<%= data.id %>">
+                                      View
+                                  </a>
+                            
+                              <% }  %>
+                                  <!-- Jika status lainnya, bisa menambahkan tindakan sesuai keperluan -->
+     
+                          </td>
+                      </tr>
+                  <% }); %>
+              </tbody>
+          </table>
+      </div>
+  </div>
+  
+  
+  </main>
+
+  <script>
+    function handleSellCarbon() {
+      alert("Karbon Anda telah dijual ke Shop Public!");
+      // Implementasikan logika backend untuk transaksi penjualan karbon.
+    }
+  </script>

@@ -1,0 +1,76 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript"
+    src="https://app.sandbox.midtrans.com/snap/snap.js"
+    data-client-key="SB-Mid-client-UwmLYo_hCgakY6Qv"></script>
+</head>
+<body>
+  <button id="pay-button">Pay!</button>
+  <%= transaksi %>
+  <% const data = dataTransaksi %>
+  <!-- Data transaksi untuk server -->
+  <script type="text/javascript">
+    const transactionToken = '<%= transaksi %>';
+    const dataTransaksi = <%- JSON.stringify(data) %>;
+
+    const datas = JSON.stringify({
+      transactionID: dataTransaksi[0], // id transaksi
+      sellerID: dataTransaksi[1],
+      buyerID: dataTransaksi[2],
+      price: dataTransaksi[3],
+      link: dataTransaksi[4], // URL pembayaran dari Midtrans
+    });
+
+    console.log(datas);
+    document.getElementById('pay-button').addEventListener('click', async function () {
+      // Kirim data transaksi ke server untuk disimpan
+      try {
+        const response = await fetch('/market/save-transaction', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: datas
+        });
+    
+        // Coba untuk mengurai respons sebagai JSON
+        let result;
+        try {
+          result = await response.json();
+        } catch (error) {
+          // Jika gagal mengurai JSON, anggap respons sebagai teks biasa
+          const text = await response.text();
+          result = { status: text }; // Atau apa pun format yang sesuai
+        }
+    
+        console.log('Transaction saved:', result);
+    
+        // Setelah transaksi berhasil disimpan, trigger Snap Popup untuk pembayaran
+        if (transactionToken) {
+          window.snap.pay(transactionToken, {
+            onPending: function (result) {
+              console.log("Transaction Pending", result);
+            },
+            onSuccess: function (result) {
+              alert("Payment Success!"); 
+              console.log(result);
+            },
+            onError: function (result) {
+              alert("Payment Failed!"); 
+              console.log(result);
+            },
+            onClose: function () {
+              alert('You closed the popup without finishing the payment');
+            }
+          });
+        } else {
+          console.error("Transaction token is missing or invalid");
+        }
+      } catch (error) {
+        console.error('Error saving transaction:', error);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<main class="tw-mt-6">
+    <div class="tw-bg-white tw-shadow-md tw-rounded-lg tw-p-6 tw-max-w-lg tw-mx-auto">
+      <form id="profileForm" enctype="multipart/form-data" method="POST" action="/users/update">
+        <div class="tw-space-y-4">
+          <!-- Full Name -->
+          <div class="tw-flex tw-flex-col">
+            <label for="fullName" class="tw-text-gray-700 tw-font-semibold">Full Name</label>
+            <input type="text" id="fullName" name="fullName" class="tw-border tw-rounded-md tw-px-2 tw-py-1" placeholder="Masukkan Nama Lengkap" required>
+          </div>
+
+          <!-- Address -->
+          <div class="tw-flex tw-flex-col">
+            <label for="address" class="tw-text-gray-700 tw-font-semibold">Address</label>
+            <input type="text" id="address" name="address" class="tw-border tw-rounded-md tw-px-2 tw-py-1" placeholder="Masukkan Alamat" required>
+          </div>
+
+          <!-- Shop Name -->
+          <div class="tw-flex tw-flex-col">
+            <label for="shopName" class="tw-text-gray-700 tw-font-semibold">Shop Name</label>
+            <input type="text" id="shopName" name="shopName" class="tw-border tw-rounded-md tw-px-2 tw-py-1" placeholder="Masukkan Nama Toko" required>
+          </div>
+
+          <div class="tw-flex tw-flex-col">
+            <label for="noHp" class="tw-text-gray-700 tw-font-semibold">Handphone Number</label>
+            <input type="text" id="noHp" name="noHp" class="tw-border tw-rounded-md tw-px-2 tw-py-1" placeholder="Masukkan Alamat" required>
+          </div>
+          
+
+          <!-- User Image (File Input) -->
+          <div class="tw-flex tw-flex-col">
+            <label for="img" class="tw-text-gray-700 tw-font-semibold">Profile Image</label>
+            <input type="file" id="img" name="img" class="tw-border tw-rounded-md tw-px-2 tw-py-1" accept="image/*" required>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="tw-flex tw-justify-center">
+            <button type="submit" class="tw-bg-blue-500 tw-text-white tw-font-semibold tw-px-6 tw-py-2 tw-rounded-lg tw-shadow-md hover:tw-bg-blue-600 focus:tw-ring-2 focus:tw-ring-blue-300">
+              Save Profile
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+
+  </script>

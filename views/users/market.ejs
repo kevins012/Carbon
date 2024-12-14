@@ -1,0 +1,86 @@
+<div class="tw-max-w-6xl tw-mx-auto tw-p-6">
+  <h1 class="tw-text-3xl tw-font-bold tw-text-gray-800 tw-mb-4">Carbon Market</h1>
+
+  <div class="tw-bg-white tw-shadow tw-rounded-lg tw-p-4">
+    <table class="tw-table-auto tw-w-full tw-text-left tw-border-collapse">
+      <thead>
+        <tr>
+          <th class="tw-border tw-px-4 tw-py-2 tw-font-bold">Name</th>
+          <th class="tw-border tw-px-4 tw-py-2 tw-font-bold">User Handphone Number</th>
+          <th class="tw-border tw-px-4 tw-py-2 tw-font-bold">Carbon (CO)</th>
+          <th class="tw-border tw-px-4 tw-py-2 tw-font-bold">Price</th>
+          <th class="tw-border tw-px-4 tw-py-2 tw-font-bold">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% datas.forEach((user, index) => { %>
+          <tr>
+            <td class="tw-border tw-px-4 tw-py-2"><%= user.fullName %></td>
+            <td class="tw-border tw-px-4 tw-py-2"><%= user.no_Hp %></td>
+            <td class="tw-border tw-px-4 tw-py-2"><%= user.total_co %> CO</td>
+            <td class="tw-border tw-px-4 tw-py-2" id="price-display-<%= index %>">
+              Rp. <%= (user.price || 10000).toLocaleString() %>
+            </td>
+            <td class="tw-border tw-px-4 tw-py-2">
+              <% if (user.id_user !== myuser) { %>
+                <form action="/market/buy" method="POST" class="tw-flex tw-items-center">
+                  <input type="hidden" name="myName" value="<%= myData.fullName %>">
+                  <input type="hidden" name="seller" value="<%= user.fullName %>">
+                  <input type="hidden" name="id_seller" value="<%= user.id_user %>">
+                  <input type="hidden" name="price" id="hidden-price-<%= index %>" value="<%= user.price || 10000 %>">
+                  <input type="number" 
+                         id="amount-<%= index %>" 
+                         name="amount" 
+                         class="tw-border tw-px-2 tw-py-1 tw-rounded tw-mr-2" 
+                         min="0" 
+                         max="<%= user.total_co %>" 
+                         placeholder="Amount" 
+                         required>
+                  <button type="submit" 
+                          class="tw-bg-blue-500 tw-text-white tw-px-4 tw-py-2 tw-rounded hover:tw-bg-blue-600">
+                    Buy
+                  </button>
+                </form>
+              <% } else { %> 
+                <button class="tw-bg-gray-500 tw-text-white tw-px-4 tw-py-2 tw-rounded">
+                  View
+                </button>
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const datas = JSON.parse('<%- JSON.stringify(datas) %>'); 
+    datas.forEach((user, index) => {
+      const inputAmount = document.getElementById(`amount-${index}`);
+      const priceDisplay = document.getElementById(`price-display-${index}`);
+      const hiddenPriceInput = document.getElementById(`hidden-price-${index}`);
+      const pricePerUnit = parseInt(hiddenPriceInput?.value) || 10000;
+
+      if (inputAmount && priceDisplay && hiddenPriceInput) {
+        // Event listener to update the price dynamically
+        inputAmount.addEventListener("input", () => {
+          const amount = parseInt(inputAmount.value) || 0;
+          const totalPrice = amount * pricePerUnit;
+      
+          // Update the displayed price
+          priceDisplay.textContent = `Rp. ${totalPrice.toLocaleString()}`;
+      
+          // Update the hidden input value for price
+          hiddenPriceInput.value = totalPrice;
+        });
+      } else {
+        console.error(
+          `Element not found for index ${index}:`,
+          { inputAmount, priceDisplay, hiddenPriceInput }
+        );
+      }
+    });
+  });
+</script>

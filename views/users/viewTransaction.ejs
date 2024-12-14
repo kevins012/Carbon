@@ -1,0 +1,39 @@
+<div class="tw-max-w-2xl tw-mx-auto tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-6">
+    <h1 class="tw-text-xl tw-font-bold tw-mb-4">Transaction Details</h1>
+
+    <div class="tw-mb-4">
+        <h2 class="tw-text-lg tw-font-semibold">Status</h2>
+        <p>Status Code: <span class="tw-font-medium"><%= datas.status_code %></span></p>
+        <p>Status Message: <span class="tw-font-medium"><%= datas.status_message %></span></p>
+        <p>Transaction Status: <span class="tw-font-medium"><%= datas.transaction_status %></span></p>
+        <p>Fraud Status: <span class="tw-font-medium"><%= datas.fraud_status %></span></p>
+    </div>
+
+    <div class="tw-mb-4">
+        <h2 class="tw-text-lg tw-font-semibold">Transaction Info</h2>
+        <p>Transaction ID: <span class="tw-font-medium"><%= datas.transaction_id %></span></p>
+        <p>Order ID: <span class="tw-font-medium"><%= datas.order_id %></span></p>
+        <p>Gross Amount: <span class="tw-font-medium"><%= datas.gross_amount %> <%= datas.currency %></span></p>
+        <p>Payment Type: <span class="tw-font-medium"><%= datas.payment_type %></span></p>
+    </div>
+
+    <div class="tw-mb-4">
+        <h2 class="tw-text-lg tw-font-semibold">Times</h2>
+        <p>Transaction Time: <span class="tw-font-medium"><%= datas.transaction_time %></span></p>
+        <p>Settlement Time: <span class="tw-font-medium"><%= datas.settlement_time %></span></p>
+        <p>Expiry Time: <span class="tw-font-medium"><%= datas.expiry_time %></span></p>
+    </div>
+
+    <div class="tw-mb-4">
+        <h2 class="tw-text-lg tw-font-semibold">Merchant Info</h2>
+        <p>Merchant ID: <span class="tw-font-medium"><%= datas.merchant_id %></span></p>
+    </div>
+
+    <div class="tw-mb-4">
+        <h2 class="tw-text-lg tw-font-semibold">Virtual Account</h2>
+        <% datas.va_numbers.forEach(function(va) { %>
+            <p>Bank: <span class="tw-font-medium"><%= va.bank %></span></p>
+            <p>VA Number: <span class="tw-font-medium"><%= va.va_number %></span></p>
+        <% }) %>
+    </div>
+</div>

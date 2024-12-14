@@ -1,0 +1,144 @@
+
+<script type="text/javascript"
+src="https://app.sandbox.midtrans.com/snap/snap.js"
+data-client-key="SB-Mid-client-UwmLYo_hCgakY6Qv"></script>
+  <!-- Container utama -->
+  <div class="tw-container tw-max-w-4xl tw-mx-auto tw-px-4 tw-py-8">
+    <!-- Card untuk data transaksi -->
+    <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-6">
+      <h2 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-6">Transaction Details</h2>
+
+      <div class="tw-space-y-4">
+        <!-- Order ID -->
+        <div class="tw-flex tw-justify-between">
+          <span class="tw-font-medium tw-text-gray-600">Order ID:</span>
+          <span class="tw-text-gray-800"><%= mydatas.transaction_details.order_id %></span>
+        </div>
+
+        <!-- Gross Amount -->
+        <div class="tw-flex tw-justify-between">
+          <span class="tw-font-medium tw-text-gray-600">Gross Amount:</span>
+          <span class="tw-text-gray-800"><%= mydatas.transaction_details.gross_amount %></span>
+        </div>
+
+        <!-- Customer Name -->
+        <div class="tw-flex tw-justify-between">
+          <span class="tw-font-medium tw-text-gray-600">Customer Name:</span>
+          <span class="tw-text-gray-800"><%= mydatas.customer_details.first_name %> <%= mydatas.customer_details.last_name %></span>
+        </div>
+
+        <!-- Customer Email -->
+        <div class="tw-flex tw-justify-between">
+          <span class="tw-font-medium tw-text-gray-600">Email:</span>
+          <span class="tw-text-gray-800"><%= mydatas.customer_details.email %></span>
+        </div>
+
+        <!-- Customer Phone -->
+        <div class="tw-flex tw-justify-between">
+          <span class="tw-font-medium tw-text-gray-600">Phone:</span>
+          <span class="tw-text-gray-800"><%= mydatas.customer_details.phone %></span>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="tw-flex tw-justify-between">
+          <span class="tw-font-medium tw-text-gray-600">Payment Options:</span>
+          <span class="tw-text-gray-800"><%= mydatas.enabled_payments.join(", ") %></span>
+        </div>
+      </div>
+
+      <div class="tw-mt-6">
+        <h3 class="tw-text-xl tw-font-semibold tw-text-gray-800">Item Details</h3>
+        <div class="tw-space-y-2">
+          <!-- Item ID -->
+          <div class="tw-flex tw-justify-between">
+            <span class="tw-font-medium tw-text-gray-600">Item ID:</span>
+            <span class="tw-text-gray-800"><%= mydatas.item_details[0].id %></span>
+          </div>
+
+          <!-- Item Name -->
+          <div class="tw-flex tw-justify-between">
+            <span class="tw-font-medium tw-text-gray-600">Item Name:</span>
+            <span class="tw-text-gray-800"><%= mydatas.item_details[0].name %></span>
+          </div>
+
+          <!-- Item Price -->
+          <div class="tw-flex tw-justify-between">
+            <span class="tw-font-medium tw-text-gray-600">Item Price:</span>
+            <span class="tw-text-gray-800"><%= mydatas.item_details[0].price %></span>
+          </div>
+
+          <!-- Item Quantity -->
+          <div class="tw-flex tw-justify-between">
+            <span class="tw-font-medium tw-text-gray-600">Quantity:</span>
+            <span class="tw-text-gray-800"><%= mydatas.item_details[0].quantity %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Button -->
+      <div class="tw-mt-8">
+        <button id="pay-button" class="tw-w-full tw-bg-blue-600 tw-text-white tw-py-3 tw-rounded-lg tw-font-semibold hover:tw-bg-blue-700 tw-transition tw-transform tw-duration-200">
+          Pay Now
+        </button>
+      </div>
+    </div>
+  </div><% const data = dataTransaksi %>
+
+  <!-- Script untuk transaksi dan Snap Midtrans -->
+  <script type="text/javascript">
+    const transactionToken = '<%= transaksi %>';
+    const dataTransaksi = <%- JSON.stringify(data) %>;
+    console.log(transactionToken)
+    const datas = JSON.stringify({
+      transactionID: dataTransaksi[0], // id transaksi
+      sellerID: dataTransaksi[1],
+      buyerID: dataTransaksi[2],
+      price: dataTransaksi[3],
+      link: dataTransaksi[4], // URL pembayaran dari Midtrans
+    });
+
+    console.log(datas);
+    document.getElementById('pay-button').addEventListener('click', async function () {
+      // Kirim data transaksi ke server untuk disimpan
+      try {
+        const response = await fetch('/market/save-transaction', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: datas
+        });
+    
+        // Mengambil respons dalam bentuk JSON
+        const result = await response.json();  // Menggunakan .json() untuk mengambil JSON
+        
+      
+    
+        // Memastikan transaksi berhasil disimpan sebelum membuka Midtrans Snap Popup
+        
+          console.log('THANDE:', result);
+    
+          // Setelah transaksi berhasil disimpan, trigger Snap Popup untuk pembayaran
+          window.snap.pay(transactionToken, {
+            onPending: function (result) {
+              console.log("Transaction Pending", result);
+            },
+            onSuccess: function (result) {
+              alert("Payment Success!"); 
+              console.log(result);
+            },
+            onError: function (result) {
+              alert("Payment Failed!"); 
+              console.log(result);
+            },
+            onClose: function () {
+              alert('You closed the popup without finishing the payment');
+            }
+          });
+       
+      } catch (error) {
+        console.error('Error saving transaction:', error);
+      }
+    });
+    
+  </script>
