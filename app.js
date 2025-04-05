@@ -179,7 +179,7 @@ app.get('/transaction-status/:order_id', async (req, res) => {
         });
 
         // Parse hasil respons
-        const transactionStatus = await response.json();
+        const transactionStatus =response.json();
 
         // Jika ada error dalam respons Midtrans
         if (!response.ok) {
